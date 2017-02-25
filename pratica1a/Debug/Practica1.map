@@ -1,0 +1,204 @@
+Archive member included because of file (symbol)
+
+C:\TARGET\Curso2015-16\Practica1-EC\Practica1-EC_v1\Practica1\libimgarm.a(imglib_arm.o)
+                              ./trafo.o (gaussian)
+
+Allocating common symbols
+Common symbol       size              file
+
+imagenRGB           0x4               ./main.o
+imagenGauss         0x40000           ./main.o
+imagenSobel         0x40000           ./main.o
+imagenGris          0x40000           ./main.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./init.o
+LOAD ./lena512color.o
+LOAD ./main.o
+LOAD ./misc.o
+LOAD ./time.o
+LOAD ./trafo.o
+LOAD C:\TARGET\Curso2015-16\Practica1-EC\Practica1-EC_v1\Practica1\libimgarm.a
+START GROUP
+LOAD c:/target/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD c:/target/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x0c000000                . = 0xc000000
+
+.data           0x0c000000    0xc0088
+ *(.data)
+ .data          0x0c000000        0x0 ./init.o
+ .data          0x0c000000    0xc0000 ./lena512color.o
+                0x0c000000                imageLena512
+ .data          0x0c0c0000        0x0 ./main.o
+ .data          0x0c0c0000        0x0 ./misc.o
+ .data          0x0c0c0000        0x0 ./time.o
+ .data          0x0c0c0000        0x0 ./trafo.o
+ .data          0x0c0c0000        0x0 C:\TARGET\Curso2015-16\Practica1-EC\Practica1-EC_v1\Practica1\libimgarm.a(imglib_arm.o)
+ *(.rodata)
+ .rodata        0x0c0c0000       0x88 C:\TARGET\Curso2015-16\Practica1-EC\Practica1-EC_v1\Practica1\libimgarm.a(imglib_arm.o)
+
+.bss            0x0c0c0088    0xc0004
+ *(.bss)
+ .bss           0x0c0c0088        0x0 ./init.o
+ .bss           0x0c0c0088        0x0 ./lena512color.o
+ .bss           0x0c0c0088        0x0 ./main.o
+ .bss           0x0c0c0088        0x0 ./misc.o
+ .bss           0x0c0c0088        0x0 ./time.o
+ .bss           0x0c0c0088        0x0 ./trafo.o
+ .bss           0x0c0c0088        0x0 C:\TARGET\Curso2015-16\Practica1-EC\Practica1-EC_v1\Practica1\libimgarm.a(imglib_arm.o)
+ *(COMMON)
+ COMMON         0x0c0c0088    0xc0004 ./main.o
+                0x0c0c0088                imagenRGB
+                0x0c0c008c                imagenGauss
+                0x0c10008c                imagenSobel
+                0x0c14008c                imagenGris
+
+.text           0x0c18008c      0x658
+ *(.text)
+ .text          0x0c18008c       0x14 ./init.o
+                0x0c18008c                start
+ .text          0x0c1800a0        0x0 ./lena512color.o
+ .text          0x0c1800a0       0xd8 ./main.o
+                0x0c1800a0                initRGB
+                0x0c1800d8                main
+ .text          0x0c180178        0x0 ./misc.o
+ .text          0x0c180178       0xdc ./time.o
+                0x0c180178                timer_init
+                0x0c1801a4                timer_start
+                0x0c1801f8                timer_stop
+ .text          0x0c180254      0x318 ./trafo.o
+                0x0c180254                rgb2gray
+                0x0c180318                RGB2GrayMatrix
+                0x0c1803ec                apply_gaussian
+                0x0c1804ac                apply_sobel
+ .text          0x0c18056c      0x178 C:\TARGET\Curso2015-16\Practica1-EC\Practica1-EC_v1\Practica1\libimgarm.a(imglib_arm.o)
+                0x0c18056c                gaussian
+                0x0c180620                sobel
+                0x0c1806e0                non_max_sup
+                0x0c1806e4                PROVIDE (end, .)
+                0x0c7ff000                PROVIDE (_stack, 0xc7ff000)
+OUTPUT(Practica1.elf elf32-littlearm)
+
+.glue_7         0x0c1806e4        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x0c1806e4        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x0c1806e4        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x0c1806e4        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.ARM.attributes
+                0x00000000       0x2c
+ .ARM.attributes
+                0x00000000       0x22 ./init.o
+ .ARM.attributes
+                0x00000022       0x32 ./lena512color.o
+ .ARM.attributes
+                0x00000054       0x32 ./main.o
+ .ARM.attributes
+                0x00000086       0x22 ./misc.o
+ .ARM.attributes
+                0x000000a8       0x32 ./time.o
+ .ARM.attributes
+                0x000000da       0x32 ./trafo.o
+ .ARM.attributes
+                0x0000010c       0x30 C:\TARGET\Curso2015-16\Practica1-EC\Practica1-EC_v1\Practica1\libimgarm.a(imglib_arm.o)
+
+.comment        0x00000000       0x3b
+ .comment       0x00000000       0x2a ./lena512color.o
+                                 0x2b (size before relaxing)
+ .comment       0x00000000       0x2b ./main.o
+ .comment       0x00000000       0x2b ./time.o
+ .comment       0x00000000       0x2b ./trafo.o
+ .comment       0x0000002a       0x11 C:\TARGET\Curso2015-16\Practica1-EC\Practica1-EC_v1\Practica1\libimgarm.a(imglib_arm.o)
+                                 0x12 (size before relaxing)
+
+.debug_line     0x00000000      0x4b4
+ .debug_line    0x00000000       0x3e ./init.o
+ .debug_line    0x0000003e       0x47 ./lena512color.o
+ .debug_line    0x00000085      0x318 ./main.o
+ .debug_line    0x0000039d       0x52 ./time.o
+ .debug_line    0x000003ef       0xc5 ./trafo.o
+
+.debug_info     0x00000000      0x501
+ .debug_info    0x00000000       0x6e ./init.o
+ .debug_info    0x0000006e       0x5d ./lena512color.o
+ .debug_info    0x000000cb      0x1ce ./main.o
+ .debug_info    0x00000299       0x74 ./time.o
+ .debug_info    0x0000030d      0x1f4 ./trafo.o
+
+.debug_abbrev   0x00000000      0x26b
+ .debug_abbrev  0x00000000       0x14 ./init.o
+ .debug_abbrev  0x00000014       0x44 ./lena512color.o
+ .debug_abbrev  0x00000058       0xe5 ./main.o
+ .debug_abbrev  0x0000013d       0x4d ./time.o
+ .debug_abbrev  0x0000018a       0xe1 ./trafo.o
+
+.debug_aranges  0x00000000       0x80
+ .debug_aranges
+                0x00000000       0x20 ./init.o
+ .debug_aranges
+                0x00000020       0x20 ./main.o
+ .debug_aranges
+                0x00000040       0x20 ./time.o
+ .debug_aranges
+                0x00000060       0x20 ./trafo.o
+
+.debug_macinfo  0x00000000     0xaf62
+ .debug_macinfo
+                0x00000000     0x210e ./lena512color.o
+ .debug_macinfo
+                0x0000210e     0x4b89 ./main.o
+ .debug_macinfo
+                0x00006c97     0x219d ./time.o
+ .debug_macinfo
+                0x00008e34     0x212e ./trafo.o
+
+.debug_pubnames
+                0x00000000      0x11c
+ .debug_pubnames
+                0x00000000       0x23 ./lena512color.o
+ .debug_pubnames
+                0x00000023       0x64 ./main.o
+ .debug_pubnames
+                0x00000087       0x40 ./time.o
+ .debug_pubnames
+                0x000000c7       0x55 ./trafo.o
+
+.debug_str      0x00000000      0x1eb
+ .debug_str     0x00000000       0x7d ./lena512color.o
+                                 0x8a (size before relaxing)
+ .debug_str     0x0000007d       0xe7 ./main.o
+                                0x147 (size before relaxing)
+ .debug_str     0x00000164       0x2c ./time.o
+                                 0x86 (size before relaxing)
+ .debug_str     0x00000190       0x5b ./trafo.o
+                                 0xd1 (size before relaxing)
+
+.debug_loc      0x00000000      0x18c
+ .debug_loc     0x00000000       0x58 ./main.o
+ .debug_loc     0x00000058       0x84 ./time.o
+ .debug_loc     0x000000dc       0xb0 ./trafo.o
+
+.debug_pubtypes
+                0x00000000       0x60
+ .debug_pubtypes
+                0x00000000       0x30 ./main.o
+ .debug_pubtypes
+                0x00000030       0x30 ./trafo.o
+
+.debug_frame    0x00000000      0x15c
+ .debug_frame   0x00000000       0x50 ./main.o
+ .debug_frame   0x00000050       0x70 ./time.o
+ .debug_frame   0x000000c0       0x9c ./trafo.o

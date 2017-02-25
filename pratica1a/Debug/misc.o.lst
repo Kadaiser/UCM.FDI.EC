@@ -1,0 +1,75 @@
+   1              	# 1 "../misc.asm"
+   1              	
+   0              	
+   0              	
+   0              	
+   2              	
+   3              	
+   4              		.text
+   5              	@ Descomentar e implementar estas funciones
+   6              	/*
+   7              		.global rgb2gray
+   8              		.global div16384
+   9              		.global apply_gaussian
+  10              	
+  11              	rgb2gray:push {r4,fp,lr}
+  12              	  		add fp, sp, #8
+  13              	
+  14              	  		ldrb r1,[r0]
+  15              	  		ldr r2,=3483
+  16              	  		mul r3,r2,r1
+  17              	
+  18              	  		ldrb r1,[r0,#1]
+  19              	  		ldr r2,=11718
+  20              	  		mul r4,r2,r1
+  21              	  		add r3,r3,r4
+  22              	
+  23              	  		ldrb r1,[r0,#2]
+  24              	  		ldr r2,=1183
+  25              	  		mul r4,r2,r1
+  26              	  		add r3,r3,r4
+  27              	
+  28              			mov r0,r3
+  29              			bl div16384
+  30              	
+  31              			sub sp,fp,#8
+  32              			pop {r4,fp,lr}
+  33              			bx lr
+  34              	
+  35              	div16384:
+  36              			push {fp}
+  37              			lsr r0,r0,#14
+  38              			pop {fp}
+  39              			bx lr
+  40              	
+  41              	apply_gaussian: push {r4-r7,lr}
+  42              			mov r6,r1		@guardo direccion im2
+  43              			mov r1,r2		@guardo parámetro 2 de gaussian
+  44              			mov r2,r3		@guardo parámetro 3 de gaussian
+  45              			mov r3,#0		@inicializo i
+  46              	for1:	cmp r3,r2
+  47              			bge Finfor1
+  48              			mov r4,#0		@inicializo j
+  49              	for2:	cmp r4,r1
+  50              			bge Finfor2
+  51              			push {r0}		@guardo dir im1 en pila para guardar contexto
+  52              			push {r4}		@ paso parmetro 5 por pila
+  53              			bl gaussian
+  54              			mul r5,r3,r1	@i*width
+  55              			add r5,r5,r4	@i*width+j
+  56              			add r7,r6,r5	@sumamos al registro base
+  57              			strb r0,[r7]	@guardamos en memoria valor de im2
+  58              			add sp,sp,#4
+  59              			pop {r0}		@recuperamos direccion im1
+  60              			add r4,r4,#1
+  61              			B for2
+  62              	Finfor2: add r3,r3, #1
+  63              			B for1
+  64              	Finfor1: pop {r4-r7,lr}
+  65              			 mov pc,lr
+  66              	*/
+  67              	
+  68              	  		.end
+NO DEFINED SYMBOLS
+
+NO UNDEFINED SYMBOLS

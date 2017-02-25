@@ -1,0 +1,188 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+imagenRGB           0x4               ./main.o
+imagenBinaria       0x40000           ./main.o
+unosPorFila         0x400             ./main.o
+imagenGris          0x40000           ./main.o
+histogram           0x200             ./main.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./init.o
+LOAD ./main.o
+LOAD ./misc.o
+LOAD ./time.o
+LOAD ./trafo.o
+START GROUP
+LOAD c:/software/electronica/arm/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD c:/software/electronica/arm/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x0c100000                . = 0xc100000
+
+.data           0x0c100000    0xc0000
+ *(.data)
+ .data          0x0c100000        0x0 ./init.o
+ .data          0x0c100000    0xc0000 ./main.o
+                0x0c100000                imageLena
+ .data          0x0c1c0000        0x0 ./misc.o
+ .data          0x0c1c0000        0x0 ./time.o
+ .data          0x0c1c0000        0x0 ./trafo.o
+ *(.rodata)
+
+.bss            0x0c1c0000    0x80608
+ *(.bss)
+ .bss           0x0c1c0000        0x0 ./init.o
+ .bss           0x0c1c0000        0x2 ./main.o
+                0x0c1c0000                time
+ .bss           0x0c1c0002        0x0 ./misc.o
+ .bss           0x0c1c0002        0x0 ./time.o
+ .bss           0x0c1c0002        0x0 ./trafo.o
+ *fill*         0x0c1c0002        0x2 00
+ COMMON         0x0c1c0004    0x80604 ./main.o
+                0x0c1c0004                imagenRGB
+                0x0c1c0008                imagenBinaria
+                0x0c200008                unosPorFila
+                0x0c200408                imagenGris
+                0x0c240408                histogram
+
+.text           0x0c240608      0x840
+ *(.text)
+ .text          0x0c240608       0x14 ./init.o
+                0x0c240608                start
+ .text          0x0c24061c      0x110 ./main.o
+                0x0c24061c                initRGB
+                0x0c240654                main
+ .text          0x0c24072c       0x64 ./misc.o
+                0x0c24072c                rgb2grayASM
+ .text          0x0c240790       0xdc ./time.o
+                0x0c240790                timer_init
+                0x0c2407bc                timer_start
+                0x0c240810                timer_stop
+ .text          0x0c24086c      0x5dc ./trafo.o
+                0x0c24086c                rgb2gray
+                0x0c240930                RGB2GrayMatrix
+                0x0c240a04                Gray2BinaryMatrix
+                0x0c240afc                computeHistogram
+                0x0c240bf4                computeThreshold
+                0x0c240d40                contarUnos
+                0x0c240e48                PROVIDE (end, .)
+START GROUP
+LOAD c:/software/electronica/arm/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD c:/software/electronica/arm/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libg.a
+LOAD c:/software/electronica/arm/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+LOAD c:/software/electronica/arm/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libm.a
+LOAD c:/software/electronica/arm/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libnosys.a
+END GROUP
+OUTPUT(pract2-parte1.elf elf32-littlearm)
+
+.glue_7         0x0c240e48        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x0c240e48        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x0c240e48        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x0c240e48        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.ARM.attributes
+                0x00000000       0x2e
+ .ARM.attributes
+                0x00000000       0x22 ./init.o
+ .ARM.attributes
+                0x00000022       0x32 ./main.o
+ .ARM.attributes
+                0x00000054       0x22 ./misc.o
+ .ARM.attributes
+                0x00000076       0x32 ./time.o
+ .ARM.attributes
+                0x000000a8       0x32 ./trafo.o
+
+.comment        0x00000000       0x2a
+ .comment       0x00000000       0x2a ./main.o
+                                 0x2b (size before relaxing)
+ .comment       0x00000000       0x2b ./time.o
+ .comment       0x00000000       0x2b ./trafo.o
+
+.debug_line     0x00000000      0x283
+ .debug_line    0x00000000       0x3e ./init.o
+ .debug_line    0x0000003e       0x93 ./main.o
+ .debug_line    0x000000d1       0x50 ./misc.o
+ .debug_line    0x00000121       0x52 ./time.o
+ .debug_line    0x00000173      0x110 ./trafo.o
+
+.debug_info     0x00000000      0x648
+ .debug_info    0x00000000       0x6b ./init.o
+ .debug_info    0x0000006b      0x209 ./main.o
+ .debug_info    0x00000274       0x6b ./misc.o
+ .debug_info    0x000002df       0x74 ./time.o
+ .debug_info    0x00000353      0x2f5 ./trafo.o
+
+.debug_abbrev   0x00000000      0x248
+ .debug_abbrev  0x00000000       0x14 ./init.o
+ .debug_abbrev  0x00000014       0xf2 ./main.o
+ .debug_abbrev  0x00000106       0x14 ./misc.o
+ .debug_abbrev  0x0000011a       0x4d ./time.o
+ .debug_abbrev  0x00000167       0xe1 ./trafo.o
+
+.debug_aranges  0x00000000       0xa0
+ .debug_aranges
+                0x00000000       0x20 ./init.o
+ .debug_aranges
+                0x00000020       0x20 ./main.o
+ .debug_aranges
+                0x00000040       0x20 ./misc.o
+ .debug_aranges
+                0x00000060       0x20 ./time.o
+ .debug_aranges
+                0x00000080       0x20 ./trafo.o
+
+.debug_macinfo  0x00000000     0x9121
+ .debug_macinfo
+                0x00000000     0x4e68 ./main.o
+ .debug_macinfo
+                0x00004e68     0x219d ./time.o
+ .debug_macinfo
+                0x00007005     0x211c ./trafo.o
+
+.debug_loc      0x00000000      0x1e4
+ .debug_loc     0x00000000       0x58 ./main.o
+ .debug_loc     0x00000058       0x84 ./time.o
+ .debug_loc     0x000000dc      0x108 ./trafo.o
+
+.debug_pubnames
+                0x00000000      0x14c
+ .debug_pubnames
+                0x00000000       0x8b ./main.o
+ .debug_pubnames
+                0x0000008b       0x40 ./time.o
+ .debug_pubnames
+                0x000000cb       0x81 ./trafo.o
+
+.debug_pubtypes
+                0x00000000       0x60
+ .debug_pubtypes
+                0x00000000       0x30 ./main.o
+ .debug_pubtypes
+                0x00000030       0x30 ./trafo.o
+
+.debug_str      0x00000000      0x1b5
+ .debug_str     0x00000000       0xf3 ./main.o
+ .debug_str     0x000000f3       0x2c ./time.o
+                                 0x78 (size before relaxing)
+ .debug_str     0x0000011f       0x96 ./trafo.o
+                                0x128 (size before relaxing)
+
+.debug_frame    0x00000000      0x194
+ .debug_frame   0x00000000       0x50 ./main.o
+ .debug_frame   0x00000050       0x70 ./time.o
+ .debug_frame   0x000000c0       0xd4 ./trafo.o

@@ -1,0 +1,185 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"time.c"
+  21              	.Ltext0:
+  22              		.file 1 "../time.c"
+ 985              		.align	2
+ 986              		.global	timer_init
+ 988              	timer_init:
+ 989              	.LFB0:
+   1:../time.c     **** #include "time.h"
+   2:../time.c     **** 
+   3:../time.c     **** /* Reloj del sistema */
+   4:../time.c     **** #define MCLK 64000000
+   5:../time.c     **** 
+   6:../time.c     **** /* WATCHDOG */
+   7:../time.c     **** #define rWTCON		(*(volatile unsigned *)0x1d30000)
+   8:../time.c     **** #define rWTDAT		(*(volatile unsigned *)0x1d30004)
+   9:../time.c     **** #define rWTCNT		(*(volatile unsigned *)0x1d30008)
+  10:../time.c     **** 
+  11:../time.c     **** void timer_init(void)
+  12:../time.c     **** {
+ 990              		.loc 1 12 0
+ 991              		.cfi_startproc
+ 992              		@ Function supports interworking.
+ 993              		@ args = 0, pretend = 0, frame = 0
+ 994              		@ frame_needed = 1, uses_anonymous_args = 0
+ 995 0000 0DC0A0E1 		mov	ip, sp
+ 996              	.LCFI0:
+ 997              		.cfi_def_cfa_register 12
+ 998 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 999 0008 04B04CE2 		sub	fp, ip, #4
+ 1000              		.cfi_offset 14, -8
+ 1001              		.cfi_offset 13, -12
+ 1002              		.cfi_offset 11, -16
+ 1003              	.LCFI1:
+ 1004              		.cfi_def_cfa 11, 4
+  13:../time.c     **** 	// freq=MCLK/(P+1)/D => P = MCLK/(freq*D) - 1
+  14:../time.c     **** 	// freq=2000 (2KHz T=0.5ms) D=128 P= MCLK/(128*2000) - 1
+  15:../time.c     **** 	// Max count = 65535*0.5ms = 37 segundos (aprox)
+  16:../time.c     **** 	rWTCON=((MCLK/256000-1)<<8)|(3<<3);
+ 1005              		.loc 1 16 0
+ 1006 000c 10309FE5 		ldr	r3, .L2
+ 1007 0010 10209FE5 		ldr	r2, .L2+4
+ 1008 0014 002083E5 		str	r2, [r3, #0]
+  17:../time.c     **** }
+ 1009              		.loc 1 17 0
+ 1010 0018 0CD04BE2 		sub	sp, fp, #12
+ 1011 001c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1012 0020 1EFF2FE1 		bx	lr
+ 1013              	.L3:
+ 1014              		.align	2
+ 1015              	.L2:
+ 1016 0024 0000D301 		.word	30605312
+ 1017 0028 18F90000 		.word	63768
+ 1018              		.cfi_endproc
+ 1019              	.LFE0:
+ 1021              		.align	2
+ 1022              		.global	timer_start
+ 1024              	timer_start:
+ 1025              	.LFB1:
+  18:../time.c     **** 
+  19:../time.c     **** void timer_start(void)
+  20:../time.c     **** {
+ 1026              		.loc 1 20 0
+ 1027              		.cfi_startproc
+ 1028              		@ Function supports interworking.
+ 1029              		@ args = 0, pretend = 0, frame = 0
+ 1030              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1031 002c 0DC0A0E1 		mov	ip, sp
+ 1032              	.LCFI2:
+ 1033              		.cfi_def_cfa_register 12
+ 1034 0030 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1035 0034 04B04CE2 		sub	fp, ip, #4
+ 1036              		.cfi_offset 14, -8
+ 1037              		.cfi_offset 13, -12
+ 1038              		.cfi_offset 11, -16
+ 1039              	.LCFI3:
+ 1040              		.cfi_def_cfa 11, 4
+  21:../time.c     **** 	rWTDAT=0xffff;
+ 1041              		.loc 1 21 0
+ 1042 0038 30309FE5 		ldr	r3, .L5
+ 1043 003c 30209FE5 		ldr	r2, .L5+4
+ 1044 0040 002083E5 		str	r2, [r3, #0]
+  22:../time.c     **** 	rWTCNT=0xffff;	 
+ 1045              		.loc 1 22 0
+ 1046 0044 2C309FE5 		ldr	r3, .L5+8
+ 1047 0048 24209FE5 		ldr	r2, .L5+4
+ 1048 004c 002083E5 		str	r2, [r3, #0]
+  23:../time.c     **** 	rWTCON |= (1<<5); 
+ 1049              		.loc 1 23 0
+ 1050 0050 24309FE5 		ldr	r3, .L5+12
+ 1051 0054 20209FE5 		ldr	r2, .L5+12
+ 1052 0058 002092E5 		ldr	r2, [r2, #0]
+ 1053 005c 202082E3 		orr	r2, r2, #32
+ 1054 0060 002083E5 		str	r2, [r3, #0]
+  24:../time.c     **** }
+ 1055              		.loc 1 24 0
+ 1056 0064 0CD04BE2 		sub	sp, fp, #12
+ 1057 0068 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1058 006c 1EFF2FE1 		bx	lr
+ 1059              	.L6:
+ 1060              		.align	2
+ 1061              	.L5:
+ 1062 0070 0400D301 		.word	30605316
+ 1063 0074 FFFF0000 		.word	65535
+ 1064 0078 0800D301 		.word	30605320
+ 1065 007c 0000D301 		.word	30605312
+ 1066              		.cfi_endproc
+ 1067              	.LFE1:
+ 1069              		.align	2
+ 1070              		.global	timer_stop
+ 1072              	timer_stop:
+ 1073              	.LFB2:
+  25:../time.c     **** 
+  26:../time.c     **** short int timer_stop(void)
+  27:../time.c     **** {
+ 1074              		.loc 1 27 0
+ 1075              		.cfi_startproc
+ 1076              		@ Function supports interworking.
+ 1077              		@ args = 0, pretend = 0, frame = 0
+ 1078              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1079 0080 0DC0A0E1 		mov	ip, sp
+ 1080              	.LCFI4:
+ 1081              		.cfi_def_cfa_register 12
+ 1082 0084 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1083 0088 04B04CE2 		sub	fp, ip, #4
+ 1084              		.cfi_offset 14, -8
+ 1085              		.cfi_offset 13, -12
+ 1086              		.cfi_offset 11, -16
+ 1087              	.LCFI5:
+ 1088              		.cfi_def_cfa 11, 4
+  28:../time.c     **** 	rWTCON &= ~(1<<5);
+ 1089              		.loc 1 28 0
+ 1090 008c 40309FE5 		ldr	r3, .L8
+ 1091 0090 3C209FE5 		ldr	r2, .L8
+ 1092 0094 002092E5 		ldr	r2, [r2, #0]
+ 1093 0098 2020C2E3 		bic	r2, r2, #32
+ 1094 009c 002083E5 		str	r2, [r3, #0]
+  29:../time.c     **** 	return (0xffff-rWTCNT);
+ 1095              		.loc 1 29 0
+ 1096 00a0 30309FE5 		ldr	r3, .L8+4
+ 1097 00a4 003093E5 		ldr	r3, [r3, #0]
+ 1098 00a8 0338A0E1 		mov	r3, r3, asl #16
+ 1099 00ac 2338A0E1 		mov	r3, r3, lsr #16
+ 1100 00b0 0330E0E1 		mvn	r3, r3
+ 1101 00b4 0338A0E1 		mov	r3, r3, asl #16
+ 1102 00b8 2338A0E1 		mov	r3, r3, lsr #16
+ 1103 00bc 0338A0E1 		mov	r3, r3, asl #16
+ 1104 00c0 4338A0E1 		mov	r3, r3, asr #16
+  30:../time.c     **** }
+ 1105              		.loc 1 30 0
+ 1106 00c4 0300A0E1 		mov	r0, r3
+ 1107 00c8 0CD04BE2 		sub	sp, fp, #12
+ 1108 00cc 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1109 00d0 1EFF2FE1 		bx	lr
+ 1110              	.L9:
+ 1111              		.align	2
+ 1112              	.L8:
+ 1113 00d4 0000D301 		.word	30605312
+ 1114 00d8 0800D301 		.word	30605320
+ 1115              		.cfi_endproc
+ 1116              	.LFE2:
+ 1118              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 time.c
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:985    .text:00000000 $a
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:988    .text:00000000 timer_init
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:1016   .text:00000024 $d
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:1021   .text:0000002c $a
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:1024   .text:0000002c timer_start
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:1062   .text:00000070 $d
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:1069   .text:00000080 $a
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:1072   .text:00000080 timer_stop
+C:\Users\Inma\AppData\Local\Temp\ccYFmmlP.s:1113   .text:000000d4 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

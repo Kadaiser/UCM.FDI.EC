@@ -1,0 +1,196 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"button.c"
+  21              	.Ltext0:
+  22              		.file 1 "../button.c"
+ 1795              		.align	2
+ 1796              		.global	button_init
+ 1798              	button_init:
+ 1799              	.LFB0:
+   1:../button.c   **** /*-------------------------------------------------------------------
+   2:../button.c   **** **
+   3:../button.c   **** **  Fichero:
+   4:../button.c   **** **    button.c  10/6/2014
+   5:../button.c   **** **
+   6:../button.c   **** **    Estructura de Computadores
+   7:../button.c   **** **    Dpto. de Arquitectura de Computadores y Automática
+   8:../button.c   **** **    Facultad de Informática. Universidad Complutense de Madrid
+   9:../button.c   **** **
+  10:../button.c   **** **  Propósito:
+  11:../button.c   **** **    Contiene las implementaciones de las funciones
+  12:../button.c   **** **    para la gestión de los pulsadores de la placa de prototipado
+  13:../button.c   **** **
+  14:../button.c   **** **  Notas de diseño:
+  15:../button.c   **** **
+  16:../button.c   **** **-----------------------------------------------------------------*/
+  17:../button.c   **** 
+  18:../button.c   **** #include "44b.h"
+  19:../button.c   **** #include "utils.h"
+  20:../button.c   **** #include "button.h"
+  21:../button.c   **** #include "leds.h"
+  22:../button.c   **** 
+  23:../button.c   **** void button_init( void )
+  24:../button.c   **** {
+ 1800              		.loc 1 24 0
+ 1801              		.cfi_startproc
+ 1802              		@ Function supports interworking.
+ 1803              		@ args = 0, pretend = 0, frame = 0
+ 1804              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1805 0000 0DC0A0E1 		mov	ip, sp
+ 1806              	.LCFI0:
+ 1807              		.cfi_def_cfa_register 12
+ 1808 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1809 0008 04B04CE2 		sub	fp, ip, #4
+ 1810              		.cfi_offset 14, -8
+ 1811              		.cfi_offset 13, -12
+ 1812              		.cfi_offset 11, -16
+ 1813              	.LCFI1:
+ 1814              		.cfi_def_cfa 11, 4
+  25:../button.c   **** 	rPCONG  = (rPCONG & ~( 0xf << 12 )) | ( 0xF << 12 );
+ 1815              		.loc 1 25 0
+ 1816 000c 30309FE5 		ldr	r3, .L2
+ 1817 0010 2C209FE5 		ldr	r2, .L2
+ 1818 0014 002092E5 		ldr	r2, [r2, #0]
+ 1819 0018 0F2A82E3 		orr	r2, r2, #61440
+ 1820 001c 002083E5 		str	r2, [r3, #0]
+  26:../button.c   ****  	rEXTINT = (rEXTINT & ~( 0xff << 24 )) | (0x22 << 24);
+ 1821              		.loc 1 26 0
+ 1822 0020 20309FE5 		ldr	r3, .L2+4
+ 1823 0024 1C209FE5 		ldr	r2, .L2+4
+ 1824 0028 002092E5 		ldr	r2, [r2, #0]
+ 1825 002c FF24C2E3 		bic	r2, r2, #-16777216
+ 1826 0030 222482E3 		orr	r2, r2, #570425344
+ 1827 0034 002083E5 		str	r2, [r3, #0]
+  27:../button.c   **** }
+ 1828              		.loc 1 27 0
+ 1829 0038 0CD04BE2 		sub	sp, fp, #12
+ 1830 003c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1831 0040 1EFF2FE1 		bx	lr
+ 1832              	.L3:
+ 1833              		.align	2
+ 1834              	.L2:
+ 1835 0044 4000D201 		.word	30539840
+ 1836 0048 5000D201 		.word	30539856
+ 1837              		.cfi_endproc
+ 1838              	.LFE0:
+ 1840              		.align	2
+ 1841              		.global	DoDetecta
+ 1843              	DoDetecta:
+ 1844              	.LFB1:
+  28:../button.c   **** 
+  29:../button.c   **** void DoDetecta(void) 
+  30:../button.c   **** {
+ 1845              		.loc 1 30 0
+ 1846              		.cfi_startproc
+ 1847              		@ Function supports interworking.
+ 1848              		@ args = 0, pretend = 0, frame = 8
+ 1849              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1850 004c 0DC0A0E1 		mov	ip, sp
+ 1851              	.LCFI2:
+ 1852              		.cfi_def_cfa_register 12
+ 1853 0050 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1854 0054 04B04CE2 		sub	fp, ip, #4
+ 1855              		.cfi_offset 14, -8
+ 1856              		.cfi_offset 13, -12
+ 1857              		.cfi_offset 11, -16
+ 1858              	.LCFI3:
+ 1859              		.cfi_def_cfa 11, 4
+ 1860 0058 08D04DE2 		sub	sp, sp, #8
+  31:../button.c   **** 	int which_int;
+  32:../button.c   **** 
+  33:../button.c   **** 	/* Idenficiar la interrupcion */
+  34:../button.c   **** 	which_int = rEXTINTPND;
+ 1861              		.loc 1 34 0
+ 1862 005c 60309FE5 		ldr	r3, .L9
+ 1863 0060 003093E5 		ldr	r3, [r3, #0]
+ 1864 0064 10300BE5 		str	r3, [fp, #-16]
+  35:../button.c   **** 
+  36:../button.c   **** 	/* Espera fin de rebote de presión */
+  37:../button.c   ****     Delay( 30 );
+ 1865              		.loc 1 37 0
+ 1866 0068 1E00A0E3 		mov	r0, #30
+ 1867 006c FEFFFFEB 		bl	Delay
+  38:../button.c   **** 
+  39:../button.c   **** 	/* Encender/apagar el LED adecuado */
+  40:../button.c   **** 	switch (which_int) {
+ 1868              		.loc 1 40 0
+ 1869 0070 10301BE5 		ldr	r3, [fp, #-16]
+ 1870 0074 040053E3 		cmp	r3, #4
+ 1871 0078 0200000A 		beq	.L6
+ 1872 007c 080053E3 		cmp	r3, #8
+ 1873 0080 0200000A 		beq	.L7
+  41:../button.c   **** 		case 4:
+  42:../button.c   **** 			led1_switch();
+  43:../button.c   **** 			break;
+  44:../button.c   **** 		case 8:
+  45:../button.c   **** 			led2_switch();
+  46:../button.c   **** 			break;
+  47:../button.c   **** 		default:
+  48:../button.c   **** 			break;
+ 1874              		.loc 1 48 0
+ 1875 0084 030000EA 		b	.L8
+ 1876              	.L6:
+  42:../button.c   **** 			led1_switch();
+ 1877              		.loc 1 42 0
+ 1878 0088 FEFFFFEB 		bl	led1_switch
+  43:../button.c   **** 			break;
+ 1879              		.loc 1 43 0
+ 1880 008c 010000EA 		b	.L8
+ 1881              	.L7:
+  45:../button.c   **** 			led2_switch();
+ 1882              		.loc 1 45 0
+ 1883 0090 FEFFFFEB 		bl	led2_switch
+  46:../button.c   **** 			break;
+ 1884              		.loc 1 46 0
+ 1885 0094 0000A0E1 		mov	r0, r0	@ nop
+ 1886              	.L8:
+  49:../button.c   ****    }
+  50:../button.c   **** 
+  51:../button.c   ****    /* Finalizar ISR */
+  52:../button.c   ****    rEXTINTPND = 0xf;				// borra los bits en EXTINTPND
+ 1887              		.loc 1 52 0
+ 1888 0098 24309FE5 		ldr	r3, .L9
+ 1889 009c 0F20A0E3 		mov	r2, #15
+ 1890 00a0 002083E5 		str	r2, [r3, #0]
+  53:../button.c   ****    rI_ISPC   |= BIT_EINT4567;		// borra el bit pendiente en INTPND
+ 1891              		.loc 1 53 0
+ 1892 00a4 1C309FE5 		ldr	r3, .L9+4
+ 1893 00a8 18209FE5 		ldr	r2, .L9+4
+ 1894 00ac 002092E5 		ldr	r2, [r2, #0]
+ 1895 00b0 022682E3 		orr	r2, r2, #2097152
+ 1896 00b4 002083E5 		str	r2, [r3, #0]
+  54:../button.c   **** }
+ 1897              		.loc 1 54 0
+ 1898 00b8 0CD04BE2 		sub	sp, fp, #12
+ 1899 00bc 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1900 00c0 1EFF2FE1 		bx	lr
+ 1901              	.L10:
+ 1902              		.align	2
+ 1903              	.L9:
+ 1904 00c4 5400D201 		.word	30539860
+ 1905 00c8 2400E001 		.word	31457316
+ 1906              		.cfi_endproc
+ 1907              	.LFE1:
+ 1909              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 button.c
+C:\Users\USUARI~1\AppData\Local\Temp\ccqGGHSX.s:1795   .text:00000000 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccqGGHSX.s:1798   .text:00000000 button_init
+C:\Users\USUARI~1\AppData\Local\Temp\ccqGGHSX.s:1835   .text:00000044 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccqGGHSX.s:1840   .text:0000004c $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccqGGHSX.s:1843   .text:0000004c DoDetecta
+C:\Users\USUARI~1\AppData\Local\Temp\ccqGGHSX.s:1904   .text:000000c4 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+Delay
+led1_switch
+led2_switch
