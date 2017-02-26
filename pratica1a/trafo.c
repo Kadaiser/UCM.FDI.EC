@@ -24,6 +24,7 @@
 unsigned char rgb2gray(pixelRGB* pixel)
 {
 	// COMPLETAR
+	return (3483*pixel->R + 11718*pixel->G + 1183*pixel->B)/16384;
 }
 
 void RGB2GrayMatrix(pixelRGB orig[], unsigned char dest[], int nfilas, int ncols) {
@@ -38,9 +39,17 @@ void RGB2GrayMatrix(pixelRGB orig[], unsigned char dest[], int nfilas, int ncols
 void apply_gaussian(unsigned char im1[], unsigned char im2[], int width, int height)
 {
 	// COMPLETAR
+	int i,j;
+		for(i = 0; i < width; i++)
+			for(j = 0; j < height; j++)
+				im2[i*width + j]= gausian(im1, width,height, i,j);
 }
 
 void apply_sobel(unsigned char im1[], unsigned char im2[], int width, int height)
 {
 	// COMPLETAR
+	int i,j;
+	for(i = 0; i < width; i++)
+		for(j = 0; j < height; j++)
+			im2[i*width + j]= sobel(im1, width,height, i,j);
 }
