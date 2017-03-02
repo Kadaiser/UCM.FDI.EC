@@ -1,0 +1,54 @@
+19:17:11 **** Build of configuration Debug for project Practica1A ****
+cs-make all 
+'Building file: ../init.asm'
+'Invoking: ARM Sourcery Windows GCC Assembler'
+arm-none-eabi-gcc -x assembler-with-cpp -Wall -Wa,-adhlns="init.o.lst" -c -fmessage-length=0 -MMD -MP -MF"init.d" -MT"init.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "init.o" "../init.asm"
+'Finished building: ../init.asm'
+' '
+'Building file: ../lena512color.c'
+'Invoking: ARM Sourcery Windows GCC C Compiler'
+arm-none-eabi-gcc -O2 -Wall -Wa,-adhlns="lena512color.o.lst" -c -fmessage-length=0 -mapcs-frame -MMD -MP -MF"lena512color.d" -MT"lena512color.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "lena512color.o" "../lena512color.c"
+'Finished building: ../lena512color.c'
+' '
+'Building file: ../main.c'
+'Invoking: ARM Sourcery Windows GCC C Compiler'
+arm-none-eabi-gcc -O2 -Wall -Wa,-adhlns="main.o.lst" -c -fmessage-length=0 -mapcs-frame -MMD -MP -MF"main.d" -MT"main.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "main.o" "../main.c"
+'Finished building: ../main.c'
+' '
+'Building file: ../misc.asm'
+'Invoking: ARM Sourcery Windows GCC Assembler'
+arm-none-eabi-gcc -x assembler-with-cpp -Wall -Wa,-adhlns="misc.o.lst" -c -fmessage-length=0 -MMD -MP -MF"misc.d" -MT"misc.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "misc.o" "../misc.asm"
+'Finished building: ../misc.asm'
+' '
+'Building file: ../time.c'
+'Invoking: ARM Sourcery Windows GCC C Compiler'
+arm-none-eabi-gcc -O2 -Wall -Wa,-adhlns="time.o.lst" -c -fmessage-length=0 -mapcs-frame -MMD -MP -MF"time.d" -MT"time.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "time.o" "../time.c"
+'Finished building: ../time.c'
+' '
+'Building file: ../trafo.c'
+'Invoking: ARM Sourcery Windows GCC C Compiler'
+arm-none-eabi-gcc -O2 -Wall -Wa,-adhlns="trafo.o.lst" -c -fmessage-length=0 -mapcs-frame -MMD -MP -MF"trafo.d" -MT"trafo.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "trafo.o" "../trafo.c"
+'Finished building: ../trafo.c'
+' '
+'Building target: Practica1A.elf'
+'Invoking: ARM Sourcery Windows GCC C Linker'
+arm-none-eabi-gcc -T"../ld_script.ld" -nostartfiles -L"D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A" -Wl,-Map,Practica1A.map -mcpu=arm7tdmi -g3 -gdwarf-2 -o "Practica1A.elf"  ./init.o ./lena512color.o ./main.o ./misc.o ./time.o ./trafo.o   -limgarm
+'Finished building target: Practica1A.elf'
+' '
+'Invoking: ARM Sourcery Windows GNU Create Flash Image'
+arm-none-eabi-objcopy -O binary Practica1A.elf  "Practica1A.hex"
+'Finished building: Practica1A.hex'
+' '
+'Invoking: ARM Sourcery Windows GNU Create Listing'
+arm-none-eabi-objdump -h -S Practica1A.elf > "Practica1A.lst"
+'Finished building: Practica1A.lst'
+' '
+'Invoking: ARM Sourcery Windows GNU Print Size'
+arm-none-eabi-size  --format=berkeley Practica1A.elf
+   text	   data	    bss	    dec	    hex	filename
+   1792	 786568	 786440	1574800	 180790	Practica1A.elf
+'Finished building: Practica1A.siz'
+' '
+
+19:17:16 Build Finished (took 5s.531ms)
+

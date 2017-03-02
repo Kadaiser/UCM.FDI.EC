@@ -1,0 +1,7 @@
+12:51:09 **** Clean-only build of configuration Debug for project pract1 ****
+cs-make clean 
+cs-rm -rf  pract1.siz  ./init.o ./main.o ./misc.o ./trafo.o  ./main.d ./trafo.d  ./init.d ./misc.d  pract1.hex  pract1.lst  pract1.elf
+' '
+
+12:51:10 Build Finished (took 172ms)
+

@@ -1,0 +1,6 @@
+20:48:04 **** Build of configuration Debug for project common ****
+cs-make all 
+cs-make: Nothing to be done for `all'.
+
+20:48:04 Build Finished (took 134ms)
+

@@ -1,0 +1,98 @@
+	.global rgb2gray
+	//.global apply_gaussian
+	.extern gaussian
+
+	.text
+
+//----------------------RGB2GRAY ARM METHOD----------------------------------//
+// PARAM R0		: DIRECCION DE UN ELEMNTO PIXELRGB DE 3 UNSIGNED CHAR
+// RETURN R0	: unsigned char
+rgb2gray:
+		PUSH {LR, R4 - R6}
+		LDR R4, =3483
+		LDR R5, =11718
+		LDR R6, =1183
+
+		LDRB R1,[R0]				//R1 almacena el valor del elemento R (LITTLE ENDIAN)
+		MUL R2,R1,R4				//R2 = R*3483
+
+		LDRB R1,[R0,#1] 			//R1 almacena el valor del elemento G (LITTLE ENDIAN)
+		MUL R3,R1,R5				//R3 = G*11718
+
+		ADD R2,R2,R3				//R2 = (R*3483) + (G*11718)
+		LDRB R1,[R0,#2] 			//R1 almacena el valor del elemento B (LITTLE ENDIAN)
+		MUL R3,R1,R6				//R3 = G*1183
+
+		ADD R2,R2,R3				//R2 = (R*3483) + (G*11718) + (B*1183)
+		MOV R0,R2
+		BL div16384				//LLAMADA A SUBRUTINA R0 = (R*3483) + (G*11718) + (B*1183)
+		POP {LR, R4 - R6}
+		MOV PC, LR					// R0 = ( (R*3483) + (G*11718) + (B*1183) )/16384
+
+div16384: push {r4,fp}
+		  mov r0, r0, lsr #14		//aprovechamos que es potencia de 2 ^14r
+		  pop {r4,fp}
+		  mov pc, lr
+
+//----------------------GAUSSIAN ARM METHOD----------------------------------//
+/*
+void apply_gaussian(unsigned char im1[], unsigned char im2[], int width, int height)
+{
+	int i,j;
+	for(i =0 ; i< width; i++)
+		for(j =0 ; j< height; j++)
+			im2[i*width + j] = gaussian(im1,width,height,i,j);
+}
+PARAMETROS
+R0 PRIMERA DIRECCION DE unsigned char im1[]
+R1 PRIMERA DIRECCION DE  unsigned char im2[]
+R2 DIRECCION int width
+R3 DIRECCION int height
+*/
+
+apply_gaussian:
+		PUSH {LR}
+
+		LDR R4,[R2]		//R4 = WIDGHT
+		LDR R5,[R3] 	//R5 = HEIGTH
+		MOV R6,#0		//R6 = contador bucle fori
+fori:
+		CMP R6, R4
+		BGE finfori
+foriout:
+		MOV R7,#0		//R7 = contador bucle forj
+		ADD R6,R6,#1
+		BL fori
+forj:
+		CMP R7,R5
+		BGE foriout
+		/*
+		PARAMETROS
+		R0 PRIMERA DIRECCION DE unsigned char im1[]
+		R1 WIDGHT
+		R2 HEIGTH
+		R3 i
+		R4 J
+*/
+		PUSH {R0-R3,LR}
+		MOV R1, R4
+		MOV R2, R5
+		MOV R3, R6
+		MOV R4, R7
+		PUSH {R4}
+		MOV LR,PC
+		BL gaussian
+		POP {R4}
+		MOV R8, R0				//R8 = RETURN gaussian
+		POP {R0-R3, LR}
+
+		MLA R9,R6,R4,R7		//R9 = i*width + j
+		STRB R8,[R1, R9,#LSL0]	//im2[i*width + j] = gaussian(im1,width,height,i,j);
+		ADD R7,R7,#1
+		BL forj
+finfori:
+		POP {LR}
+		MOV PC, LR
+
+
+		.end

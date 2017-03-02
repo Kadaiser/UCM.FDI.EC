@@ -1,0 +1,11 @@
+15:39:28 **** Incremental Build of configuration Debug for project pract5 ****
+cs-make all 
+'Invoking: ARM Sourcery Windows GNU Print Size'
+arm-none-eabi-size  --format=berkeley pract5.elf
+   text	   data	    bss	    dec	    hex	filename
+   1252	    100	      4	   1356	    54c	pract5.elf
+'Finished building: pract5.siz'
+' '
+
+15:39:29 Build Finished (took 495ms)
+

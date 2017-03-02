@@ -1,0 +1,150 @@
+	.global rgb2gray
+	.global apply_gaussian
+	.extern gaussian
+
+	.equ COEF1, 3483
+	.equ COEF2, 11718
+	.equ COEF3, 1183
+	.equ DIVI, 16384
+
+	.text
+/*
+
+//----------------------RGB2GRAY ARM METHOD----------------------------------//
+// PARAM R0		: DIRECCION DE UN ELEMNTO PIXELRGB DE 3 UNSIGNED CHAR
+// RETURN R0	: unsigned char
+
+rgb2gray:
+		PUSH {LR, R4, R5, R6}
+		LDR R4, =COEF1
+		LDR R5, =COEF2
+		LDR R6, =COEF3
+
+		LDRB R1,[R0]				//R1 almacena el valor del elemento R (LITTLE ENDIAN)
+		MUL R2,R1,R4				//R2 = R*3483
+		LDRB R1,[R0,#1] 			//R1 almacena el valor del elemento G (LITTLE ENDIAN)
+		MUL R3,R1,R5				//R3 = G*11718
+		ADD R2,R2,R3				//R2 = (R*3483) + (G*11718)
+		LDRB R1,[R0,#2] 			//R1 almacena el valor del elemento B (LITTLE ENDIAN)
+		MUL R3,R1,R6				//R3 = G*1183
+		ADD R2,R2,R3				//R2 = (R*3483) + (G*11718) + (B*1183)
+		MOV R0,R2
+		PUSH {LR}
+		BL divdiv16384				//LLAMADA A SUBRUTINA R0 = (R*3483) + (G*11718) + (B*1183)
+		POP {LR}
+		POP {LR, R4, R5, R6}
+		MOV PC, LR					// R0 = ( (R*3483) + (G*11718) + (B*1183) )/16384
+
+div16384:
+		MOV R1, #0				//RESULTADO DE LA DIVISION
+		LDR R2, =DIVI			//R2 DIRECCION ETIQUETA
+		LDR R3,[R2]				//R3 = 16384
+
+	bucle:
+		CMP R0, R3
+		BLT else
+		SUB R0,R0,R3
+		ADD R1,R1, #1
+		B bucle
+	else:
+		MOV R0, R1
+		MOV PC,LR
+		*/
+rgb2gray: push {r4-r10,fp,lr}
+		  add fp, sp, #24
+
+		  mov r4, r0		//Pongo en r4 la direccion del pixel
+		  mov r5, #0		//Para acceder a cada campo del struct
+
+		  ldrb r6, [r4, r5]	//El lsl es 0 porque al ser un char es un byte (2^0) y no se pone
+		  ldr r9, =COEF1	//Necesito cargar la direccion de los COEF para poder operar
+		  mul r10, r6, r9	//Hallamos el primer valor (No se puede multiplicar en el mismo reg)
+		  mov r6, r10
+		  add r5, r5, #1	//Para acceder a la siguiente posicion del struct;
+		  					//Lo hacemos igual para la segunda posicion
+		  ldrb r7, [r4, r5]
+		  ldr r9, =COEF2	//Necesito cargar la direccion de los COEF para poder operar
+		  mul r10, r7, r9	//(No se puede multiplicar en el mismo reg)
+		  mov r7, r10
+		  add r5, r5, #1
+		  					//Y lo mismo apra la tercera
+		  ldrb r8, [r4, r5]
+		  ldr r9, =COEF3	//Necesito cargar la direccion de los COEF para poder operar
+		  mul r10, r8, r9	//(No se puede multiplicar en el mismo reg)
+		  mov r8, r10
+		  					//Hallamos el numero
+		  add r6, r6, r7
+		  add r6, r6, r8
+		  					//Y lo movemos al r0
+		  mov r0, r6
+
+		  bl div16384
+
+		  sub fp, sp, #24
+		  pop {r4-r10,fp,lr}
+		  mov pc, lr
+
+div16384: push {r4,fp}
+		  mov r0, r0, lsr #14
+		  pop {r4,fp}
+		  mov pc, lr
+
+//----------------------GAUSSIAN ARM METHOD----------------------------------//
+/**
+void apply_gaussian(unsigned char im1[], unsigned char im2[], int width, int height)
+{
+	int i,j;
+	for(i =0 ; i< width; i++)
+		for(j =0 ; j< height; j++)
+			im2[i*width + j] = gaussian(im1,width,height,i,j);
+}
+PARAMETROS
+R0 PRIMERA DIRECCION DE unsigned char im1[]
+R1 PRIMERA DIRECCION DE  unsigned char im2[]
+R2 DIRECCION int width
+R3 DIRECCION int height
+*/
+
+apply_gaussian:
+		PUSH{LR}
+		LDR	R4,R2		//R4 = widht
+		LDR R5,R3		//R5 = heigth
+		MOV R6,#0		//CONTADOR i = 0
+fori:
+		CMP R6,R4		//i < widght
+		BLT finfori
+		MOV R7,#0		//CONTADOR J = 0
+
+forj:
+		CMP R7,R5		//j > height
+		BLT finforj
+		PUSH{R0-R3}
+		MOV R1,R4
+		MOV R2,R5
+		MOV R3,R6
+		MOV R4,R7
+		/*
+		* R0 PRIMERA DIRECCION DE unsigned char im1[]
+		* R1 VALOR
+		* R2
+		* R3
+		* R4
+		*/
+		BL gaussian
+		MOV R8, R0		//RESULTADO EN R8
+		POP{R0-R3}
+
+		ADD R9, R4, R7//width + j
+
+		ADD R7,R7,#1
+		BL
+
+finforj:
+		ADD R6,R6,#1
+		B fori
+
+finfori:
+		POP{LR}
+		MOV PC, LR
+
+		.end

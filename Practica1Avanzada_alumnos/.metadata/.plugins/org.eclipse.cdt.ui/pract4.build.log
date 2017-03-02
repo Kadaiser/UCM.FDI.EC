@@ -1,0 +1,39 @@
+14:38:46 **** Build of configuration Debug for project pract4 ****
+cs-make all 
+'Building file: ../init.asm'
+'Invoking: ARM Sourcery Windows GCC Assembler'
+arm-none-eabi-gcc -x assembler-with-cpp -Wall -Wa,-adhlns="init.o.lst" -c -fmessage-length=0 -MMD -MP -MF"init.d" -MT"init.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "init.o" "../init.asm"
+'Finished building: ../init.asm'
+' '
+'Building file: ../main.c'
+'Invoking: ARM Sourcery Windows GCC C Compiler'
+arm-none-eabi-gcc -O0 -Wall -Wa,-adhlns="main.o.lst" -c -fmessage-length=0 -mapcs-frame -MMD -MP -MF"main.d" -MT"main.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "main.o" "../main.c"
+'Finished building: ../main.c'
+' '
+'Building file: ../rutinas_asm.asm'
+'Invoking: ARM Sourcery Windows GCC Assembler'
+arm-none-eabi-gcc -x assembler-with-cpp -Wall -Wa,-adhlns="rutinas_asm.o.lst" -c -fmessage-length=0 -MMD -MP -MF"rutinas_asm.d" -MT"rutinas_asm.d" -mcpu=arm7tdmi -g3 -gdwarf-2 -o "rutinas_asm.o" "../rutinas_asm.asm"
+'Finished building: ../rutinas_asm.asm'
+' '
+'Building target: pract4.elf'
+'Invoking: ARM Sourcery Windows GCC C Linker'
+arm-none-eabi-gcc -T"../ld_script.ld" -nostartfiles -Wl,-Map,pract4.map -mcpu=arm7tdmi -g3 -gdwarf-2 -o "pract4.elf"  ./init.o ./main.o ./rutinas_asm.o   
+'Finished building target: pract4.elf'
+' '
+'Invoking: ARM Sourcery Windows GNU Create Flash Image'
+arm-none-eabi-objcopy -O binary pract4.elf  "pract4.hex"
+'Finished building: pract4.hex'
+' '
+'Invoking: ARM Sourcery Windows GNU Create Listing'
+arm-none-eabi-objdump -h -S pract4.elf > "pract4.lst"
+'Finished building: pract4.lst'
+' '
+'Invoking: ARM Sourcery Windows GNU Print Size'
+arm-none-eabi-size  --format=berkeley pract4.elf
+   text	   data	    bss	    dec	    hex	filename
+   1420	    256	    128	   1804	    70c	pract4.elf
+'Finished building: pract4.siz'
+' '
+
+14:38:47 Build Finished (took 1s.137ms)
+

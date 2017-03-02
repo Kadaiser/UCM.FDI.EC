@@ -1,0 +1,117 @@
+/*-----------------------------------------------------------------
+**
+**  Fichero:
+**    trafo.h  10/6/2014
+**
+**    Estructura de Computadores
+**    Dpto. de Arquitectura de Computadores y Automática
+**    Facultad de Informática. Universidad Complutense de Madrid
+**
+**  Propósito:
+**    Contiene las implementaciones de las funciones en C
+**    usadas por el programa principal
+**
+**  Notas de diseño:
+**
+**---------------------------------------------------------------*/
+
+#include "trafo.h"
+#include "types.h"
+
+
+/*extern unsigned char rgb2grayASM(pixelRGB* pixel);*/
+
+
+void RGB2GrayMatrix(pixelRGB orig[], unsigned char dest[], int nfilas, int ncols)
+{
+	int i,j;
+
+	    for (i=0;i<nfilas;i++){
+	        for (j=0; j<ncols; j++){
+	            dest[i*ncols+j] =  rgb2gray(&orig[i*ncols+j]);
+	        }
+	    }
+
+}
+
+unsigned char rgb2gray(pixelRGB* pixel)
+{
+	unsigned char dest;
+
+	dest=(3483*pixel->R+11718*pixel->G+1183*pixel->B)/16384;
+	return dest;
+}
+
+void Gray2BinaryMatrix(unsigned char orig[], unsigned char dest[], unsigned char umbral, int nfilas, int ncols)
+{
+	int i,j;
+
+	for(i=0;i<nfilas;i++){
+		for(j=0;j<ncols;j++){
+			if(orig[i*ncols+j]>umbral){
+				dest[i*ncols+j]=0xff;
+			}
+			else{
+				dest[i*ncols+j]=0;
+			}
+
+		}
+	}
+}
+
+unsigned char computeThreshold(short int histogram[])
+{
+	short int max=-1, max2=-1;
+	int max_idx=-1, max2_idx=-1;
+	int i;
+	unsigned char umbral;
+
+	for(i=0;i<128;i++){
+		if(histogram[i]>max){
+			max=histogram[i];
+			max_idx=i;
+		}
+	}
+	for(i=128;i<256;i++){
+		if(histogram[i]>max2){
+			max2=histogram[i];
+			max2_idx=i;
+		}
+	}
+	umbral=max_idx+(max2_idx-max_idx)/2;
+	return umbral;
+}
+
+void computeHistogram(unsigned char imagenGris[], short int histogram[], int nfilas, int ncols)
+{
+
+	int i,j;
+
+	//Inicializar histograma
+	for(i=0;i<256;i++){
+		histogram[i]=0;
+	}
+	for(i=0;i<nfilas;i++){
+		for(j=0;j<ncols;j++){
+			histogram[imagenGris[i*ncols+j]]++;
+		}
+	}
+}
+void contarUnos(unsigned char mat[], short int vector[],int nfilas,int ncols)
+{
+	int i,j;
+
+	//Inicializo el vector de unos
+	for(i=0;i<nfilas;i++){
+			vector[i]=0;
+		}
+
+	for(i=0;i<nfilas;i++){
+			for(j=0;j<ncols;j++){
+				if(mat[i*ncols+j]==0xff){
+					vector[i]++;
+
+				}
+			}
+	}
+}

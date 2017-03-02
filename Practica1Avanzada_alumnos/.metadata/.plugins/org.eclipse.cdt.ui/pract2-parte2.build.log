@@ -1,0 +1,6 @@
+09:36:01 **** Clean-only build of configuration Debug for project pract2-parte2 ****
+cs-make clean 
+cs-make: *** No rule to make target `clean'.  Stop.
+
+09:36:01 Build Finished (took 193ms)
+

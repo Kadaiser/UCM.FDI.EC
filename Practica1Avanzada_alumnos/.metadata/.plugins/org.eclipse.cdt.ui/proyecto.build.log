@@ -1,0 +1,7 @@
+21:30:09 **** Clean-only build of configuration Debug for project proyecto ****
+cs-make clean 
+cs-rm -rf  proyecto.siz  ./proyecto.o  ./proyecto.d  proyecto.hex  proyecto.lst  proyecto.elf
+' '
+
+21:30:09 Build Finished (took 147ms)
+

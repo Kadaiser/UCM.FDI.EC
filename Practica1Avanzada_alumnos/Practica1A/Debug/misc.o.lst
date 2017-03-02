@@ -1,0 +1,193 @@
+   1              	# 1 "../misc.asm"
+   1              		.global rgb2gray
+   0              	
+   0              	
+   0              	
+   2              		.global apply_gaussian
+   3              		.extern gaussian
+   4              		.global suma
+   5              		.extern media
+   6              	
+   7              	.data
+   8              	
+   9              	
+  10              	.bss
+  11 0000 00       	vmedia: 	.space 1
+  12              	
+  13              	
+  14              		.text
+  15              	
+  16              	//----------------------RGB2GRAY ARM METHOD----------------------------------//
+  17              	// PARAM R0		: DIRECCION DE UN ELEMENTO PIXELRGB DE 3 UNSIGNED CHAR
+  18              	// RETURN R0	: unsigned char
+  19              	rgb2gray:
+  20 0000 70402DE9 			PUSH {R4 - R6, LR}
+  21 0004 18419FE5 			LDR R4, =3483
+  22 0008 18519FE5 			LDR R5, =11718
+  23 000c 18619FE5 			LDR R6, =1183
+  24              	
+  25 0010 0010D0E5 			LDRB R1,[R0]				//R1 almacena el valor del elemento R (LITTLE ENDIAN)
+  26 0014 910402E0 			MUL R2,R1,R4				//R2 = R*3483
+  27              	
+  28 0018 0110D0E5 			LDRB R1,[R0,#1] 			//R1 almacena el valor del elemento G (LITTLE ENDIAN)
+  29 001c 910503E0 			MUL R3,R1,R5				//R3 = G*11718
+  30              	
+  31 0020 032082E0 			ADD R2,R2,R3				//R2 = (R*3483) + (G*11718)
+  32 0024 0210D0E5 			LDRB R1,[R0,#2] 			//R1 almacena el valor del elemento B (LITTLE ENDIAN)
+  33 0028 910603E0 			MUL R3,R1,R6				//R3 = G*1183
+  34              	
+  35 002c 032082E0 			ADD R2,R2,R3				//R2 = (R*3483) + (G*11718) + (B*1183)
+  36 0030 0200A0E1 			MOV R0,R2
+  37 0034 010000EB 			BL div16384				//LLAMADA A SUBRUTINA R0 = (R*3483) + (G*11718) + (B*1183)
+  38 0038 7040BDE8 			POP {R4 - R6, LR}
+  39 003c 0EF0A0E1 			MOV PC, LR					// R0 = ( (R*3483) + (G*11718) + (B*1183) )/16384
+  40              	
+  41              	div16384:
+  42 0040 2007A0E1 			  mov r0, r0, lsr #14		//aprovechamos que es potencia de 2 ^14r
+  43 0044 0EF0A0E1 			  mov pc, lr
+  44              	
+  45              	//----------------------GAUSSIAN ARM METHOD----------------------------------//
+  46              	/*
+  47              	void apply_gaussian(unsigned char im1[], unsigned char im2[], int width, int height)
+  48              	{
+  49              		int i,j;
+  50              		for(i =0 ; i< width; i++)
+  51              			for(j =0 ; j< height; j++)
+  52              				im2[i*width + j] = gaussian(im1,width,height,i,j);
+  53              	}
+  54              	*/
+  55              	apply_gaussian:
+  56 0048 F0412DE9 			PUSH {R4-R8,LR}
+  57              			//R0 direccion im1
+  58              			//R1 direccion im2
+  59              			//R2 width
+  60              			//R3 height
+  61 004c 0040A0E3 			MOV R4,#0			//R4 i
+  62              	
+  63 0050 020054E1 	for1:	CMP R4,R2			//i< width
+  64 0054 140000AA 			BGE finfor1
+  65 0058 0050A0E3 			MOV R5,#0			//R5 j
+  66 005c 030055E1 	for2:	CMP R5,R3			//j< height
+  67 0060 0F0000AA 			BGE finfor2
+  68              	
+  69 0064 1F002DE9 			PUSH {R0-R4}
+  70 0068 0210A0E1 			MOV R1,R2
+  71 006c 0320A0E1 			MOV R2,R3
+  72 0070 0430A0E1 			MOV R3,R4
+  73 0074 0540A0E1 			MOV R4,R5
+  74              	
+  75 0078 04402DE5 			PUSH {R4}	//Guardamos en pilaR4 para que entre a SUBRUTINA como 5ªPARAM
+  76 007c 0FE0A0E1 			MOV LR,PC
+  77 0080 FEFFFFEB 			BL gaussian
+  78 0084 04409DE4 			POP {R4}
+  79              	
+  80 0088 0070A0E1 			MOV R7,R0	//R7 return gaussian
+  81 008c 1F00BDE8 			POP {R0-R4}
+  82              	
+  83 0090 940208E0 			MUL R8,R4,R2			//i* width
+  84 0094 058088E0 			ADD R8,R8,R5			//R8=(i*width) + j
+  85 0098 0870C1E7 			STRB R7,[R1,R8]	//im2[i*width + j] = gaussian(im1,width,height,i,j);
+  86 009c 015085E2 			ADD R5,R5,#1			//CONTADOR J++
+  87 00a0 EDFFFFEA 			B for2
+  88              	
+  89              	finfor2:
+  90 00a4 014084E2 			ADD R4,R4,#1	//CONTADOR i++
+  91 00a8 E8FFFFEA 			B for1
+  92              	
+  93              	finfor1:
+  94 00ac F041BDE8 			POP {R4-R8,LR}
+  95 00b0 0EF0A0E1 			MOV PC,LR
+  96              	
+  97              	  /*/----------------------SUMA ARM METHOD----------------------------------//
+  98              	
+  99              	  void suma (im1,width){
+ 100              	int i,j;
+ 101              	int sum=0; 				//Definir en r4
+ 102              	int num=0; 				//Definir en r5
+ 103              	int vmedia;
+ 104              	for (i=0;i<width;i++){
+ 105              		for(j=0;j<width;j++){
+ 106              			sum=sum+im1[i*width+j];
+ 107              			num=num+1;
+ 108              		}
+ 109              	}
+ 110              		vmedia=media(unsigned char sum,unsigned char num);
+ 111              	 */
+ 112              	
+ 113              	 //R0 direccion de la imagen
+ 114              	 //r1 entero width
+ 115              	 suma:
+ 116 00b4 F0432DE9 	 		PUSH {R4-R9,LR}
+ 117              			//R0 direccion im1
+ 118              			//R1 width
+ 119              	
+ 120 00b8 0040A0E3 			MOV R4,#0			//R4 suma
+ 121 00bc 0050A0E3 			MOV R5,#0			//R5 num
+ 122 00c0 0020A0E3 			MOV R2,#0			//R2 = i <= 0;
+ 123              	
+ 124 00c4 010052E1 	for1suma:	CMP R2,R1			//i< width
+ 125 00c8 0A0000AA 			BGE finfor1suma
+ 126 00cc 0030A0E3 			MOV R3,#0			//R3 = j <= 0;
+ 127 00d0 010053E1 	for2suma:	CMP R3,R1			//j< height
+ 128 00d4 050000AA 			BGE finfor2suma
+ 129              	
+ 130 00d8 913226E0 			MLA R6,R1,R2,R3			// R6 = (i* width)+j
+ 131 00dc 0670D0E7 			LDRB R7,[R0,R6]	//R7 = im1[i*width+j];
+ 132 00e0 074084E0 			ADD R4,R4,R7			//sum= sum + im1[i*width+j];
+ 133 00e4 015085E2 			ADD R5,R5,#1			//num++
+ 134              	
+ 135 00e8 013083E2 			ADD R3,R3,#1			//CONTADOR j++
+ 136 00ec F7FFFFEA 			B for2suma
+ 137              	
+ 138              	finfor2suma:
+ 139 00f0 012082E2 			ADD R2,R2,#1	//CONTADOR i++
+ 140 00f4 F2FFFFEA 			B for1suma
+ 141              	
+ 142              	finfor1suma:
+ 143              	
+ 144 00f8 0080A0E3 			MOV R8,#0		//R8 = vmedia <= 0
+ 145              	
+ 146 00fc 0F002DE9 			PUSH {R0-R3}
+ 147              			/*parametros
+ 148              			R0 direccion im1
+ 149              			R1 int num
+ 150              			*/
+ 151 0100 0400A0E1 			MOV R0,R4
+ 152 0104 0510A0E1 			MOV R1,R5
+ 153 0108 FEFFFFEB 			BL media
+ 154 010c 0080A0E1 			MOV R8,R0		//R8 return vmedia
+ 155 0110 0F00BDE8 			POP {R0-R3}
+ 156              	
+ 157 0114 14909FE5 			LDR R9, = vmedia //direccion de vmedia
+ 158 0118 008089E5 			STR R8,[R9]		//guardar valor vmedia
+ 159              	
+ 160 011c F043BDE8 			POP {R4-R9,LR}
+ 161 0120 0EF0A0E1 			MOV PC,LR
+ 162              	
+ 163              	
+ 164 0124 9B0D0000 	    .end
+ 164      C62D0000 
+ 164      9F040000 
+ 164      00000000 
+DEFINED SYMBOLS
+         ../misc.asm:19     .text:00000000 rgb2gray
+         ../misc.asm:55     .text:00000048 apply_gaussian
+         ../misc.asm:115    .text:000000b4 suma
+         ../misc.asm:11     .bss:00000000 vmedia
+         ../misc.asm:11     .bss:00000000 $d
+         ../misc.asm:20     .text:00000000 $a
+         ../misc.asm:41     .text:00000040 div16384
+         ../misc.asm:63     .text:00000050 for1
+         ../misc.asm:93     .text:000000ac finfor1
+         ../misc.asm:66     .text:0000005c for2
+         ../misc.asm:89     .text:000000a4 finfor2
+         ../misc.asm:124    .text:000000c4 for1suma
+         ../misc.asm:142    .text:000000f8 finfor1suma
+         ../misc.asm:127    .text:000000d0 for2suma
+         ../misc.asm:138    .text:000000f0 finfor2suma
+         ../misc.asm:164    .text:00000124 $d
+                   .debug_aranges:0000000c $d
+
+UNDEFINED SYMBOLS
+gaussian
+media

@@ -1,0 +1,70 @@
+
+
+
+	.text
+@ Descomentar e implementar estas funciones
+
+	.global rgb2gray
+	.global div16384
+	@.global apply_gaussian
+
+rgb2gray:push {r4,fp,lr}
+  		add fp, sp, #8
+
+  		ldrb r1,[r0]
+  		ldr r2,=3483
+  		mul r3,r2,r1
+
+  		ldrb r1,[r0,#1]
+  		ldr r2,=11718
+  		mul r4,r2,r1
+  		add r3,r3,r4
+
+  		ldrb r1,[r0,#2]
+  		ldr r2,=1183
+  		mul r4,r2,r1
+  		add r3,r3,r4
+
+		mov r0,r3
+		bl div16384
+
+		sub sp,fp,#8
+		pop {r4,fp,lr}
+		bx lr
+
+div16384:
+		push {fp}
+		lsr r0,r0,#14
+		pop {fp}
+		bx lr
+
+apply_gaussian: push {r4-r7,lr}
+		mov r6,r1		@guardo direccion im2
+		mov r1,r2		@guardo parámetro 2 de gaussian
+		mov r2,r3		@guardo parámetro 3 de gaussian
+		mov r3,#0		@inicializo i
+for1:	cmp r3,r2
+		bge Finfor1
+		mov r4,#0		@inicializo j
+for2:	cmp r4,r1
+		bge Finfor2
+		push {r0}		@guardo dir im1 en pila para guardar contexto
+		push {r4}		@ paso parmetro 5 por pila
+		bl gaussian
+		mul r5,r3,r1	@i*width
+		add r5,r5,r4	@i*width+j
+		add r7,r6,r5	@sumamos al registro base
+		strb r0,[r7]	@guardamos en memoria valor de im2
+		add sp,sp,#4
+		pop {r0}		@recuperamos direccion im1
+		add r4,r4,#1
+		B for2
+Finfor2: add r3,r3, #1
+		B for1
+Finfor1: pop {r4-r7,lr}
+		 mov pc,lr
+
+
+  		.end
+
+

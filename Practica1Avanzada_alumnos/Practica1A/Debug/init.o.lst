@@ -1,0 +1,44 @@
+   1              	# 1 "../init.asm"
+   1              	/*-----------------------------------------------------------------
+   0              	
+   0              	
+   0              	
+   2              	**
+   3              	**  Fichero:
+   4              	**    init.asm  10/6/2014
+   5              	**
+   6              	**    Fundamentos de Computadores
+   7              	**    Dpto. de Arquitectura de Computadores y Automática
+   8              	**    Facultad de Informática. Universidad Complutense de Madrid
+   9              	**
+  10              	**  Propósito:
+  11              	**    Arranca un programa en C
+  12              	**
+  13              	**  Notas de diseño:
+  14              	**
+  15              	**---------------------------------------------------------------*/
+  16              	
+  17              	    .extern main
+  18              	    .extern _stack
+  19              		.global start
+  20              	
+  21              	start:
+  22 0000 08D09FE5 	    ldr sp,=_stack
+  23 0004 00B0A0E3 	    mov fp,#0
+  24              	    
+  25 0008 FEFFFFEB 	    bl main
+  26              	
+  27              	End:
+  28 000c FEFFFFEA 	    B End
+  29              	
+  30 0010 00000000 		.end
+DEFINED SYMBOLS
+         ../init.asm:21     .text:00000000 start
+         ../init.asm:22     .text:00000000 $a
+         ../init.asm:27     .text:0000000c End
+         ../init.asm:30     .text:00000010 $d
+                   .debug_aranges:0000000c $d
+
+UNDEFINED SYMBOLS
+_stack
+main

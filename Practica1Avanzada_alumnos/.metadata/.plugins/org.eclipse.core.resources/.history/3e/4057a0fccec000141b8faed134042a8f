@@ -1,0 +1,37 @@
+/*-----------------------------------------------------------------
+**
+**  Fichero:
+**    trafo.h  10/6/2014
+**
+**    Estructura de Computadores
+**    Dpto. de Arquitectura de Computadores y Automática
+**    Facultad de Informática. Universidad Complutense de Madrid
+**
+**  Propósito:
+**    Contiene las declaraciones de los prototipos de funciones
+**    usadas por el programa principal
+**
+**  Notas de diseño:
+**
+**---------------------------------------------------------------*/
+
+#ifndef _TRAFO_H
+#define _TRAFO_H
+
+#include "types.h"
+
+
+void RGB2GrayMatrix(pixelRGB orig[], unsigned char dest[], int nfilas, int ncols);
+
+void Gray2BinaryMatrix(unsigned char orig[], unsigned char dest[], unsigned char umbral, int nfilas, int ncols);
+
+/*extern void computeHistogramASM(unsigned char imagenGris[],short int histogram[],int N,int M);*/
+void computeHistogram(unsigned char imagenGris[],short int histogram[],int N,int M);
+
+unsigned char computeThreshold(short int histogram[]);
+
+unsigned char rgb2gray(pixelRGB* pixel);
+
+void contarUnos(unsigned char mat[], short int vector[],int nfilas, int ncols);
+
+#endif

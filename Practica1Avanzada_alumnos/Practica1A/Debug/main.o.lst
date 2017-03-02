@@ -1,0 +1,225 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 18, 4
+  11              		.file	"main.c"
+  21              	.Ltext0:
+  22              		.file 1 "../main.c"
+ 2003              		.align	2
+ 2004              		.global	initRGB
+ 2006              	initRGB:
+ 2007              	.LFB0:
+   1:../main.c     **** /*
+   2:../main.c     ****  * Practica 1 de Estructura de Computadores
+   3:../main.c     ****  * Grupo 2º C, LAB 8 PTO 12
+   4:../main.c     ****  * Facultad de Informática de la Complutense
+   5:../main.c     ****  *
+   6:../main.c     ****  *
+   7:../main.c     ****  * Alumnos:
+   8:../main.c     ****  *
+   9:../main.c     ****  * Diego Valbuena Pineda
+  10:../main.c     ****  * Enrique Julio de la Cruz Valderrama
+  11:../main.c     ****  */
+  12:../main.c     **** 
+  13:../main.c     **** 
+  14:../main.c     **** 
+  15:../main.c     **** #include <stdio.h>
+  16:../main.c     **** #include "trafo.h"
+  17:../main.c     **** #include "types.h"
+  18:../main.c     **** #include "time.h"
+  19:../main.c     **** #include "lena512color.h"
+  20:../main.c     **** extern void apply_gaussian(unsigned char im1[], unsigned char im2[], int width, int height);
+  21:../main.c     **** extern void suma(unsigned char im1[],int width);
+  22:../main.c     **** 
+  23:../main.c     **** 
+  24:../main.c     **** // la imagen de LENA
+  25:../main.c     **** #define LENA
+  26:../main.c     **** 
+  27:../main.c     **** #ifdef LENA
+  28:../main.c     **** #define N 512
+  29:../main.c     **** #define M 512
+  30:../main.c     **** pixelRGB* imagenRGB;
+  31:../main.c     **** #else
+  32:../main.c     **** #define N 512
+  33:../main.c     **** #define M 512
+  34:../main.c     **** pixelRGB imagenRGB[N*M];
+  35:../main.c     **** #endif
+  36:../main.c     **** 
+  37:../main.c     **** unsigned char imagenGris[N*M];
+  38:../main.c     **** unsigned char imagenGauss[N*M];
+  39:../main.c     **** unsigned char imagenSobel[N*M];
+  40:../main.c     **** 
+  41:../main.c     **** #ifndef LENA
+  42:../main.c     **** void initRGB(int nfilas, int ncols)
+  43:../main.c     **** {
+  44:../main.c     ****     int i,j;
+  45:../main.c     **** 
+  46:../main.c     ****     for (i=0;i<nfilas;i++)
+  47:../main.c     ****         for (j=0; j<ncols; j++) {
+  48:../main.c     ****         	imagenRGB[i*ncols+j].R = (i+j)%256;
+  49:../main.c     ****         	imagenRGB[i*ncols+j].G = (i+j)%256;
+  50:../main.c     ****         	imagenRGB[i*ncols+j].B = (i+j)%256;
+  51:../main.c     ****         }
+  52:../main.c     **** }
+  53:../main.c     **** #else
+  54:../main.c     **** void initRGB(int nfilas, int ncols)
+  55:../main.c     **** {
+ 2008              		.loc 1 55 0
+ 2009              		.cfi_startproc
+ 2010              		@ Function supports interworking.
+ 2011              		@ args = 0, pretend = 0, frame = 0
+ 2012              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2013              		@ link register save eliminated.
+ 2014              	.LVL0:
+  56:../main.c     ****     imagenRGB = (pixelRGB*) imageLena512;
+ 2015              		.loc 1 56 0
+ 2016 0000 08209FE5 		ldr	r2, .L2
+ 2017 0004 08309FE5 		ldr	r3, .L2+4
+ 2018 0008 002083E5 		str	r2, [r3, #0]
+  57:../main.c     **** }
+ 2019              		.loc 1 57 0
+ 2020 000c 1EFF2FE1 		bx	lr
+ 2021              	.L3:
+ 2022              		.align	2
+ 2023              	.L2:
+ 2024 0010 00000000 		.word	imageLena512
+ 2025 0014 00000000 		.word	imagenRGB
+ 2026              		.cfi_endproc
+ 2027              	.LFE0:
+ 2029              		.align	2
+ 2030              		.global	main
+ 2032              	main:
+ 2033              	.LFB1:
+  58:../main.c     **** #endif
+  59:../main.c     **** 
+  60:../main.c     **** 
+  61:../main.c     **** int main() {
+ 2034              		.loc 1 61 0
+ 2035              		.cfi_startproc
+ 2036              		@ Function supports interworking.
+ 2037              		@ args = 0, pretend = 0, frame = 0
+ 2038              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2039              	.LVL1:
+ 2040 0018 0DC0A0E1 		mov	ip, sp
+ 2041              	.LCFI0:
+ 2042              		.cfi_def_cfa_register 12
+ 2043 001c 30D82DE9 		stmfd	sp!, {r4, r5, fp, ip, lr, pc}
+ 2044 0020 04B04CE2 		sub	fp, ip, #4
+ 2045              		.cfi_offset 14, -8
+ 2046              		.cfi_offset 13, -12
+ 2047              		.cfi_offset 11, -16
+ 2048              		.cfi_offset 5, -20
+ 2049              		.cfi_offset 4, -24
+ 2050              	.LCFI1:
+ 2051              		.cfi_def_cfa 11, 4
+  62:../main.c     **** 	short int time = 0;
+  63:../main.c     ****     timer_init();
+ 2052              		.loc 1 63 0
+ 2053 0024 FEFFFFEB 		bl	timer_init
+ 2054              	.LVL2:
+ 2055              	.LBB4:
+ 2056              	.LBB5:
+  56:../main.c     ****     imagenRGB = (pixelRGB*) imageLena512;
+ 2057              		.loc 1 56 0
+ 2058 0028 6C509FE5 		ldr	r5, .L5
+ 2059 002c 6C309FE5 		ldr	r3, .L5+4
+ 2060              	.LBE5:
+ 2061              	.LBE4:
+  64:../main.c     ****     initRGB(N,M);
+  65:../main.c     ****     timer_start();
+  66:../main.c     ****     RGB2GrayMatrix(imagenRGB, imagenGris,N,M);
+ 2062              		.loc 1 66 0
+ 2063 0030 6C409FE5 		ldr	r4, .L5+8
+ 2064              	.LBB7:
+ 2065              	.LBB6:
+  56:../main.c     ****     imagenRGB = (pixelRGB*) imageLena512;
+ 2066              		.loc 1 56 0
+ 2067 0034 003085E5 		str	r3, [r5, #0]
+ 2068              	.LBE6:
+ 2069              	.LBE7:
+  65:../main.c     ****     timer_start();
+ 2070              		.loc 1 65 0
+ 2071 0038 FEFFFFEB 		bl	timer_start
+ 2072              		.loc 1 66 0
+ 2073 003c 022CA0E3 		mov	r2, #512
+ 2074 0040 0230A0E1 		mov	r3, r2
+ 2075 0044 0410A0E1 		mov	r1, r4
+ 2076 0048 000095E5 		ldr	r0, [r5, #0]
+ 2077 004c FEFFFFEB 		bl	RGB2GrayMatrix
+  67:../main.c     ****     suma(imagenGris,N);
+  68:../main.c     ****     apply_gaussian(imagenGris, imagenGauss, N, M);
+ 2078              		.loc 1 68 0
+ 2079 0050 50509FE5 		ldr	r5, .L5+12
+  67:../main.c     ****     suma(imagenGris,N);
+ 2080              		.loc 1 67 0
+ 2081 0054 0400A0E1 		mov	r0, r4
+ 2082 0058 021CA0E3 		mov	r1, #512
+ 2083 005c FEFFFFEB 		bl	suma
+ 2084              		.loc 1 68 0
+ 2085 0060 022CA0E3 		mov	r2, #512
+ 2086 0064 0230A0E1 		mov	r3, r2
+ 2087 0068 0510A0E1 		mov	r1, r5
+ 2088 006c 0400A0E1 		mov	r0, r4
+ 2089 0070 FEFFFFEB 		bl	apply_gaussian
+  69:../main.c     ****     apply_sobel(imagenGauss, imagenSobel, N, M);
+ 2090              		.loc 1 69 0
+ 2091 0074 022CA0E3 		mov	r2, #512
+ 2092 0078 0500A0E1 		mov	r0, r5
+ 2093 007c 28109FE5 		ldr	r1, .L5+16
+ 2094 0080 0230A0E1 		mov	r3, r2
+ 2095 0084 FEFFFFEB 		bl	apply_sobel
+  70:../main.c     ****     time = timer_stop();
+ 2096              		.loc 1 70 0
+ 2097 0088 FEFFFFEB 		bl	timer_stop
+ 2098              	.LVL3:
+  71:../main.c     ****     return 0;
+  72:../main.c     **** }
+ 2099              		.loc 1 72 0
+ 2100 008c 0000A0E3 		mov	r0, #0
+ 2101 0090 14D04BE2 		sub	sp, fp, #20
+ 2102 0094 30689DE8 		ldmfd	sp, {r4, r5, fp, sp, lr}
+ 2103 0098 1EFF2FE1 		bx	lr
+ 2104              	.L6:
+ 2105              		.align	2
+ 2106              	.L5:
+ 2107 009c 00000000 		.word	imagenRGB
+ 2108 00a0 00000000 		.word	imageLena512
+ 2109 00a4 00000000 		.word	imagenGris
+ 2110 00a8 00000000 		.word	imagenGauss
+ 2111 00ac 00000000 		.word	imagenSobel
+ 2112              		.cfi_endproc
+ 2113              	.LFE1:
+ 2115              		.comm	imagenRGB,4,4
+ 2116              		.comm	imagenGris,262144,4
+ 2117              		.comm	imagenGauss,262144,4
+ 2118              		.comm	imagenSobel,262144,4
+ 2119              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\Kadaiser\AppData\Local\Temp\cctsmYLh.s:2003   .text:00000000 $a
+C:\Users\Kadaiser\AppData\Local\Temp\cctsmYLh.s:2006   .text:00000000 initRGB
+C:\Users\Kadaiser\AppData\Local\Temp\cctsmYLh.s:2024   .text:00000010 $d
+                            *COM*:00000004 imagenRGB
+C:\Users\Kadaiser\AppData\Local\Temp\cctsmYLh.s:2029   .text:00000018 $a
+C:\Users\Kadaiser\AppData\Local\Temp\cctsmYLh.s:2032   .text:00000018 main
+C:\Users\Kadaiser\AppData\Local\Temp\cctsmYLh.s:2107   .text:0000009c $d
+                            *COM*:00040000 imagenGris
+                            *COM*:00040000 imagenGauss
+                            *COM*:00040000 imagenSobel
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+imageLena512
+timer_init
+timer_start
+RGB2GrayMatrix
+suma
+apply_gaussian
+apply_sobel
+timer_stop

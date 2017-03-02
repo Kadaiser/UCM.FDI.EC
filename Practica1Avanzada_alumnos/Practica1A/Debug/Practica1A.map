@@ -1,0 +1,234 @@
+Archive member included because of file (symbol)
+
+D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A\libimgarm.a(imglib_arm.o)
+                              ./misc.o (gaussian)
+d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+                              ./trafo.o (__aeabi_uidiv)
+d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+                              d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+
+Allocating common symbols
+Common symbol       size              file
+
+imagenRGB           0x4               ./main.o
+imagenGauss         0x40000           ./main.o
+imagenSobel         0x40000           ./main.o
+imagenGris          0x40000           ./main.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./init.o
+LOAD ./lena512color.o
+LOAD ./main.o
+LOAD ./misc.o
+LOAD ./time.o
+LOAD ./trafo.o
+LOAD D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A\libimgarm.a
+START GROUP
+LOAD d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x0c000000                . = 0xc000000
+
+.data           0x0c000000    0xc0088
+ *(.data)
+ .data          0x0c000000        0x0 ./init.o
+ .data          0x0c000000    0xc0000 ./lena512color.o
+                0x0c000000                imageLena512
+ .data          0x0c0c0000        0x0 ./main.o
+ .data          0x0c0c0000        0x0 ./misc.o
+ .data          0x0c0c0000        0x0 ./time.o
+ .data          0x0c0c0000        0x0 ./trafo.o
+ .data          0x0c0c0000        0x0 D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A\libimgarm.a(imglib_arm.o)
+ .data          0x0c0c0000        0x0 d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+ .data          0x0c0c0000        0x0 d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+ *(.rodata)
+ .rodata        0x0c0c0000       0x88 D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A\libimgarm.a(imglib_arm.o)
+
+.bss            0x0c0c0088    0xc0008
+ *(.bss)
+ .bss           0x0c0c0088        0x0 ./init.o
+ .bss           0x0c0c0088        0x0 ./lena512color.o
+ .bss           0x0c0c0088        0x0 ./main.o
+ .bss           0x0c0c0088        0x1 ./misc.o
+ .bss           0x0c0c0089        0x0 ./time.o
+ .bss           0x0c0c0089        0x0 ./trafo.o
+ .bss           0x0c0c0089        0x0 D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A\libimgarm.a(imglib_arm.o)
+ .bss           0x0c0c0089        0x0 d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+ .bss           0x0c0c0089        0x0 d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+ *(COMMON)
+ *fill*         0x0c0c0089        0x3 00
+ COMMON         0x0c0c008c    0xc0004 ./main.o
+                0x0c0c008c                imagenRGB
+                0x0c0c0090                imagenGauss
+                0x0c100090                imagenSobel
+                0x0c140090                imagenGris
+
+.text           0x0c180090      0x700
+ *(.text)
+ .text          0x0c180090       0x14 ./init.o
+                0x0c180090                start
+ .text          0x0c1800a4        0x0 ./lena512color.o
+ .text          0x0c1800a4       0xb0 ./main.o
+                0x0c1800a4                initRGB
+                0x0c1800bc                main
+ .text          0x0c180154      0x134 ./misc.o
+                0x0c180154                rgb2gray
+                0x0c18019c                apply_gaussian
+                0x0c180208                suma
+ .text          0x0c180288       0x64 ./time.o
+                0x0c180288                timer_init
+                0x0c1802a0                timer_start
+                0x0c1802c8                timer_stop
+ .text          0x0c1802ec      0x214 ./trafo.o
+                0x0c1802ec                RGB2GrayMatrix
+                0x0c1803d4                apply_sobel
+                0x0c1804e4                media
+ .text          0x0c180500      0x178 D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A\libimgarm.a(imglib_arm.o)
+                0x0c180500                gaussian
+                0x0c1805b4                sobel
+                0x0c180674                non_max_sup
+ .text          0x0c180678      0x114 d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+                0x0c180678                __aeabi_uidiv
+                0x0c180678                __udivsi3
+                0x0c18076c                __aeabi_uidivmod
+ .text          0x0c18078c        0x4 d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+                0x0c18078c                __aeabi_idiv0
+                0x0c18078c                __aeabi_ldiv0
+                0x0c180790                PROVIDE (end, .)
+                0x0c7ff000                PROVIDE (_stack, 0xc7ff000)
+OUTPUT(Practica1A.elf elf32-littlearm)
+
+.glue_7         0x0c180790        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x0c180790        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x0c180790        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x0c180790        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.ARM.attributes
+                0x00000000       0x2c
+ .ARM.attributes
+                0x00000000       0x22 ./init.o
+ .ARM.attributes
+                0x00000022       0x32 ./lena512color.o
+ .ARM.attributes
+                0x00000054       0x32 ./main.o
+ .ARM.attributes
+                0x00000086       0x22 ./misc.o
+ .ARM.attributes
+                0x000000a8       0x32 ./time.o
+ .ARM.attributes
+                0x000000da       0x32 ./trafo.o
+ .ARM.attributes
+                0x0000010c       0x30 D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A\libimgarm.a(imglib_arm.o)
+ .ARM.attributes
+                0x0000013c       0x1a d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+ .ARM.attributes
+                0x00000156       0x18 d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+
+.comment        0x00000000       0x3b
+ .comment       0x00000000       0x2a ./lena512color.o
+                                 0x2b (size before relaxing)
+ .comment       0x00000000       0x2b ./main.o
+ .comment       0x00000000       0x2b ./time.o
+ .comment       0x00000000       0x2b ./trafo.o
+ .comment       0x0000002a       0x11 D:\Desarrollo\EclipeJuno\Practica1Avanzada_alumnos\Practica1A\libimgarm.a(imglib_arm.o)
+                                 0x12 (size before relaxing)
+
+.debug_line     0x00000000      0x590
+ .debug_line    0x00000000       0x3e ./init.o
+ .debug_line    0x0000003e       0x47 ./lena512color.o
+ .debug_line    0x00000085      0x35e ./main.o
+ .debug_line    0x000003e3       0x87 ./misc.o
+ .debug_line    0x0000046a       0x51 ./time.o
+ .debug_line    0x000004bb       0xd5 ./trafo.o
+
+.debug_info     0x00000000      0x56d
+ .debug_info    0x00000000       0x79 ./init.o
+ .debug_info    0x00000079       0x5d ./lena512color.o
+ .debug_info    0x000000d6      0x1ff ./main.o
+ .debug_info    0x000002d5       0x79 ./misc.o
+ .debug_info    0x0000034e       0x71 ./time.o
+ .debug_info    0x000003bf      0x1ae ./trafo.o
+
+.debug_abbrev   0x00000000      0x292
+ .debug_abbrev  0x00000000       0x14 ./init.o
+ .debug_abbrev  0x00000014       0x44 ./lena512color.o
+ .debug_abbrev  0x00000058      0x10f ./main.o
+ .debug_abbrev  0x00000167       0x14 ./misc.o
+ .debug_abbrev  0x0000017b       0x4d ./time.o
+ .debug_abbrev  0x000001c8       0xca ./trafo.o
+
+.debug_aranges  0x00000000       0xa0
+ .debug_aranges
+                0x00000000       0x20 ./init.o
+ .debug_aranges
+                0x00000020       0x20 ./main.o
+ .debug_aranges
+                0x00000040       0x20 ./misc.o
+ .debug_aranges
+                0x00000060       0x20 ./time.o
+ .debug_aranges
+                0x00000080       0x20 ./trafo.o
+
+.debug_macinfo  0x00000000     0xaf5e
+ .debug_macinfo
+                0x00000000     0x210d ./lena512color.o
+ .debug_macinfo
+                0x0000210d     0x4b88 ./main.o
+ .debug_macinfo
+                0x00006c95     0x219c ./time.o
+ .debug_macinfo
+                0x00008e31     0x212d ./trafo.o
+
+.debug_pubnames
+                0x00000000      0x106
+ .debug_pubnames
+                0x00000000       0x23 ./lena512color.o
+ .debug_pubnames
+                0x00000023       0x64 ./main.o
+ .debug_pubnames
+                0x00000087       0x40 ./time.o
+ .debug_pubnames
+                0x000000c7       0x3f ./trafo.o
+
+.debug_str      0x00000000      0x19d
+ .debug_str     0x00000000       0x7d ./lena512color.o
+                                 0x8a (size before relaxing)
+ .debug_str     0x0000007d       0xae ./main.o
+                                0x152 (size before relaxing)
+ .debug_str     0x0000012b       0x2c ./time.o
+                                 0x89 (size before relaxing)
+ .debug_str     0x00000157       0x46 ./trafo.o
+                                 0xda (size before relaxing)
+
+.debug_loc      0x00000000      0x22c
+ .debug_loc     0x00000000       0x40 ./main.o
+ .debug_loc     0x00000040      0x1ec ./trafo.o
+
+.debug_pubtypes
+                0x00000000       0x60
+ .debug_pubtypes
+                0x00000000       0x30 ./main.o
+ .debug_pubtypes
+                0x00000030       0x30 ./trafo.o
+
+.debug_ranges   0x00000000       0x18
+ .debug_ranges  0x00000000       0x18 ./main.o
+
+.debug_frame    0x00000000      0x148
+ .debug_frame   0x00000000       0x48 ./main.o
+ .debug_frame   0x00000048       0x40 ./time.o
+ .debug_frame   0x00000088       0xa0 ./trafo.o
+ .debug_frame   0x00000128       0x20 d:/desarrollo/eclipejuno/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)

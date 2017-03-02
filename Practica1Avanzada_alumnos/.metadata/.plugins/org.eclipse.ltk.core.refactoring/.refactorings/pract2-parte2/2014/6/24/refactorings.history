@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;pract2-parte2/ram_ice.ld&apos; to &apos;ld_script.ld&apos;" description="Rename resource &apos;ram_ice.ld&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="ram_ice.ld" name="ld_script.ld" stamp="1402502958667" updateReferences="true"/>
+</session>

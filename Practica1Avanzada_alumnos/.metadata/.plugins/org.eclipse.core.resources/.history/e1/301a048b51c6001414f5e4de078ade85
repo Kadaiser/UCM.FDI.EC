@@ -1,0 +1,169 @@
+/*-----------------------------------------------------------------
+**
+**  Fichero:
+**    misc.asm  10/6/2014
+**
+**    Estructura de Computadores
+**    Dpto. de Arquitectura de Computadores y Automática
+**    Facultad de Informática. Universidad Complutense de Madrid
+**
+**  Propósito:
+**    Contiene las implementaciones de las funciones en ensamblador
+**    usadas por el programa principal
+**
+**  Notas de diseño:
+**
+**---------------------------------------------------------------*/
+
+.global contarUnos
+.global rgb2gray
+.global rgb2gray2
+.text
+/*-----------------------------------------------------------------
+**
+**  Fichero:
+**    misc.asm  10/6/2014
+**
+**    Estructura de Computadores
+**    Dpto. de Arquitectura de Computadores y Automática
+**    Facultad de Informática. Universidad Complutense de Madrid
+**
+**  Propósito:
+**    Contiene las implementaciones de las funciones en ensamblador
+**    usadas por el programa principal
+**
+**  Notas de diseño:
+**
+**---------------------------------------------------------------*/
+
+.global rgb2grayARM
+.global computeHistogramARM
+.global computeThresholdARM
+.global RGB2GrayMatrixARM
+.extern rgb2gray
+
+.text
+
+
+rgb2grayARM:
+  		push {r4,fp,lr}
+  		add fp, sp, #8
+
+  		ldrb r1,[r0]
+  		ldr r2,=3483
+  		mul r3,r2,r1
+
+  		ldrb r1,[r0,#1]
+  		ldr r2,=11718
+  		mul r4,r2,r1
+  		add r3,r3,r4
+
+  		ldrb r1,[r0,#2]
+  		ldr r2,=1183
+  		mul r4,r2,r1
+  		add r3,r3,r4
+
+		mov r0,r3
+		bl div16384
+
+		sub sp,fp,#8
+		pop {r4,fp,lr}
+		bx lr
+
+div16384:
+		push {fp}
+		lsr r0,r0,#14
+		pop {fp}
+		bx lr
+
+computeHistogramARM: push {r4-r8,fp}
+					 add fp,sp,#20
+					 mov r4,#0
+					 mov r5,#0
+					 mov r6,#0
+for1:				 cmp r4,#255
+					 bgt salirfor1
+				 	 strh r5,[r1,r6]
+				 	 add r4,r4,#1
+				 	 add r6,r6,#2
+				 	 b for1
+salirfor1:			 mov r4,#0
+					 mov r8,#2
+for2:				 cmp r4,r2
+	      			 bge finfor2
+	      			 mov r5,#0
+for3:			     cmp r5,r3
+					 bge finfor3
+					 mul r6,r4,r3
+					 add r6,r6,r5
+					 ldrb r6,[r0,r6]
+					 mul r7,r6,r8
+					 ldrh r6,[r1,r7]
+					 add r6,r6,#1
+					 strh r6,[r1,r7]
+					 add r5,r5,#1
+					 b for3
+finfor3:			 add r4,r4,#1
+					 b for2
+finfor2:             sub sp,fp,#20
+					 pop {r4-r8,fp}
+					 mov pc,lr
+
+computeThresholdARM: push {r4-r8,fp}
+					 add fp,sp,#20
+					 mov r4,#-1
+					 mov r5,#-1
+					 mov r6,#-1
+					 mov r7,#-1
+					 mov r8,#0
+fort1: 				 cmp r8,#128
+					 bge fort2
+					 mov r2,#2
+					 mul r2,r8,r2
+					 ldrh r1,[r0,r2]
+					 cmp r1,r4
+					 ble fin_if1
+					 mov r4,r1
+					 mov r5,r8
+fin_if1:		     add r8,r8,#1
+                     b fort1
+
+fort2:			     cmp r8,#255
+					 bgt fin_fort2
+					 mov r2,#2
+					 mul r2,r8,r2
+					 ldrh r1,[r0,r2]
+					 cmp r1,r6
+					 ble fin_if2
+					 mov r6,r1
+					 mov r7,r8
+fin_if2:		     add r8,r8,#1
+                     b fort2
+fin_fort2:			 sub r7,r7,r5
+                     lsr r7,r7,#1
+                     add r0,r5,r7
+
+                     pop {r4-r8,fp}
+					 mov pc,lr
+
+RGB2GrayMatrixARM:   push {r4-r6,fp}
+					 add fp,sp,#12
+					 mov r4,#0
+					 mov r5,#0
+rgb_for1:            cmp r4,R2
+			         bge fin_rgb_for1
+rgb_for2:  			 cmp r5,r3
+			         bge fin_rgb_for2
+			         push {r0-r3}
+			         mul r6,r4,r3
+			         add r6,r6,r5
+			         add r0,r0,r6
+			         bl rgb2gray
+			         strb r0,[r1,r6]
+			         add r5,r5,#1
+			         pop {r0-r3}
+			         b rgb_for2
+fin_rgb_for2:	     add r4,r4,#1
+                     b rgb_for1
+fin_rgb_for1:	     pop {r4-r6,fp}
+					 mov pc,lr

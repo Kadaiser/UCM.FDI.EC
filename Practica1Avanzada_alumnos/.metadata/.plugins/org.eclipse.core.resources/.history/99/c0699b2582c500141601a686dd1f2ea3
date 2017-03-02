@@ -1,0 +1,92 @@
+/*-------------------------------------------------------------------
+**
+**  Fichero:
+**    main.c  10/6/2014
+**
+**    Estructura de Computadores
+**    Dpto. de Arquitectura de Computadores y Automática
+**    Facultad de Informática. Universidad Complutense de Madrid
+**
+**  Propósito:
+**    Genera y trata una colección de excepciones/interrupciones
+**
+**  Notas de diseño:
+**
+**-----------------------------------------------------------------*/
+
+
+/*-----------------------------------------------------------------
+**
+**  Fichero:
+**    main.c  10/6/2014
+**
+**    Estructura de Computadores
+**    Dpto. de Arquitectura de Computadores y Automática
+**    Facultad de Informática. Universidad Complutense de Madrid
+**
+**  Propósito:
+**    Transforma una imagen RGB en una en escala de grises para
+**    a su vez trasformarla en una imagen binaria
+**
+**  Notas de diseño:
+**
+**---------------------------------------------------------------*/
+#include "44b.h"
+#include "trafo.h"
+#include "types.h"
+#include "time.h"
+#include "lena512color.h"
+
+
+// Comentar esta linea para NO usar como entrada
+// la imagen de LENA
+#define LENA
+
+#ifdef LENA
+#define N 512
+#define M 512
+pixelRGB* imagenRGB;
+#else
+#define N 4
+#define M 4
+pixelRGB imagenRGB[N*M];
+#endif
+
+unsigned char imagenGris[N*M];
+unsigned char imagenBinaria[N*M];
+short int histogram[256];
+short int unosPorFila[N];
+short int time=0;
+
+void initRGB(int nfilas, int ncols) {
+
+#ifndef LENA
+    int i,j;
+
+    for (i=0;i<nfilas;i++)
+        for (j=0; j<ncols; j++) {
+        	imagenRGB[i*ncols+j].R = (i+j)%256;
+        	imagenRGB[i*ncols+j].G = (i+j)%256;
+        	imagenRGB[i*ncols+j].B = (i+j)%256;
+        }
+#else
+    imagenRGB = (pixelRGB*) imageLena;
+#endif
+}
+
+
+
+int main() {
+    unsigned char threshold;
+    timer_init();
+    initRGB(N,M);
+
+    timer_start();
+    RGB2GrayMatrix(imagenRGB,imagenGris,N,M);
+    computeHistogram(imagenGris,histogram,N,M);
+    threshold= computeThresholdASM(histogram);
+    Gray2BinaryMatrix(imagenGris,imagenBinaria,threshold,N,M);
+    contarUnos(imagenBinaria,unosPorFila,N,M);
+    time = timer_stop();
+    return 0;
+}

@@ -1,0 +1,111 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"utils.c"
+  21              	.Ltext0:
+  22              		.file 1 "../utils.c"
+ 976              		.align	2
+ 977              		.global	Delay
+ 979              	Delay:
+ 980              	.LFB0:
+   1:../utils.c    **** /*-------------------------------------------------------------------
+   2:../utils.c    **** **
+   3:../utils.c    **** **  Fichero:
+   4:../utils.c    **** **    utils.c  10/6/2014
+   5:../utils.c    **** **
+   6:../utils.c    **** **    Estructura de Computadores
+   7:../utils.c    **** **    Dpto. de Arquitectura de Computadores y Automática
+   8:../utils.c    **** **    Facultad de Informática. Universidad Complutense de Madrid
+   9:../utils.c    **** **
+  10:../utils.c    **** **  Propósito:
+  11:../utils.c    **** **    Contiene las implementaciones de funciones auxiliares
+  12:../utils.c    **** **
+  13:../utils.c    **** **  Notas de diseño:
+  14:../utils.c    **** **    Equivale al fichero homónimo usado en Fundamentos de Computadores 
+  15:../utils.c    **** **
+  16:../utils.c    **** **-----------------------------------------------------------------*/
+  17:../utils.c    **** 
+  18:../utils.c    **** #include "utils.h"
+  19:../utils.c    **** 
+  20:../utils.c    **** #define LOOP_COUNT (487)
+  21:../utils.c    **** 
+  22:../utils.c    **** /* Función que realiza una espera activa de time milisegundos */
+  23:../utils.c    **** void Delay( int time )
+  24:../utils.c    **** {
+ 981              		.loc 1 24 0
+ 982              		.cfi_startproc
+ 983              		@ Function supports interworking.
+ 984              		@ args = 0, pretend = 0, frame = 16
+ 985              		@ frame_needed = 1, uses_anonymous_args = 0
+ 986 0000 0DC0A0E1 		mov	ip, sp
+ 987              	.LCFI0:
+ 988              		.cfi_def_cfa_register 12
+ 989 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 990 0008 04B04CE2 		sub	fp, ip, #4
+ 991              		.cfi_offset 14, -8
+ 992              		.cfi_offset 13, -12
+ 993              		.cfi_offset 11, -16
+ 994              	.LCFI1:
+ 995              		.cfi_def_cfa 11, 4
+ 996 000c 10D04DE2 		sub	sp, sp, #16
+ 997 0010 18000BE5 		str	r0, [fp, #-24]
+  25:../utils.c    **** 	int i;
+  26:../utils.c    **** 
+  27:../utils.c    **** 	/* Bucle de espera activa */
+  28:../utils.c    **** 	for( ; time>0; time--)
+ 998              		.loc 1 28 0
+ 999 0014 0B0000EA 		b	.L2
+ 1000              	.L5:
+  29:../utils.c    **** 		for( i=LOOP_COUNT; i; i-- );
+ 1001              		.loc 1 29 0
+ 1002 0018 40309FE5 		ldr	r3, .L6
+ 1003 001c 10300BE5 		str	r3, [fp, #-16]
+ 1004 0020 020000EA 		b	.L3
+ 1005              	.L4:
+ 1006              		.loc 1 29 0 is_stmt 0 discriminator 2
+ 1007 0024 10301BE5 		ldr	r3, [fp, #-16]
+ 1008 0028 013043E2 		sub	r3, r3, #1
+ 1009 002c 10300BE5 		str	r3, [fp, #-16]
+ 1010              	.L3:
+ 1011              		.loc 1 29 0 discriminator 1
+ 1012 0030 10301BE5 		ldr	r3, [fp, #-16]
+ 1013 0034 000053E3 		cmp	r3, #0
+ 1014 0038 F9FFFF1A 		bne	.L4
+  28:../utils.c    **** 	for( ; time>0; time--)
+ 1015              		.loc 1 28 0 is_stmt 1
+ 1016 003c 18301BE5 		ldr	r3, [fp, #-24]
+ 1017 0040 013043E2 		sub	r3, r3, #1
+ 1018 0044 18300BE5 		str	r3, [fp, #-24]
+ 1019              	.L2:
+  28:../utils.c    **** 	for( ; time>0; time--)
+ 1020              		.loc 1 28 0 is_stmt 0 discriminator 1
+ 1021 0048 18301BE5 		ldr	r3, [fp, #-24]
+ 1022 004c 000053E3 		cmp	r3, #0
+ 1023 0050 F0FFFFCA 		bgt	.L5
+  30:../utils.c    **** }
+ 1024              		.loc 1 30 0 is_stmt 1
+ 1025 0054 0CD04BE2 		sub	sp, fp, #12
+ 1026 0058 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1027 005c 1EFF2FE1 		bx	lr
+ 1028              	.L7:
+ 1029              		.align	2
+ 1030              	.L6:
+ 1031 0060 E7010000 		.word	487
+ 1032              		.cfi_endproc
+ 1033              	.LFE0:
+ 1035              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 utils.c
+C:\Users\USUARI~1\AppData\Local\Temp\cctvcQgv.s:976    .text:00000000 $a
+C:\Users\USUARI~1\AppData\Local\Temp\cctvcQgv.s:979    .text:00000000 Delay
+C:\Users\USUARI~1\AppData\Local\Temp\cctvcQgv.s:1031   .text:00000060 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS
