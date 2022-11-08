@@ -1,0 +1,206 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"main.c"
+  21              	.Ltext0:
+  22              		.file 1 "../main.c"
+ 1811              		.align	2
+ 1812              		.global	intcont_init
+ 1814              	intcont_init:
+ 1815              	.LFB0:
+   1:../main.c     **** /*-------------------------------------------------------------------
+   2:../main.c     **** **
+   3:../main.c     **** **  Fichero:
+   4:../main.c     **** **    main.c  10/6/2014
+   5:../main.c     **** **
+   6:../main.c     **** **    Estructura de Computadores
+   7:../main.c     **** **    Dpto. de Arquitectura de Computadores y Automática
+   8:../main.c     **** **    Facultad de Informática. Universidad Complutense de Madrid
+   9:../main.c     **** **
+  10:../main.c     **** **  Propósito:
+  11:../main.c     **** **    Implementa el juego del mastermind
+  12:../main.c     **** **
+  13:../main.c     **** **  Notas de diseño:
+  14:../main.c     **** **
+  15:../main.c     **** **-----------------------------------------------------------------*/
+  16:../main.c     **** 
+  17:../main.c     **** #include "44b.h"
+  18:../main.c     **** #include "utils.h"
+  19:../main.c     **** #include "leds.h"
+  20:../main.c     **** #include "D8Led.h"
+  21:../main.c     **** #include "timer.h"
+  22:../main.c     **** #include "keyboard.h"
+  23:../main.c     **** 
+  24:../main.c     **** extern int modojuego;
+  25:../main.c     **** 
+  26:../main.c     **** /*Configurar el controlador de interrupciones*/
+  27:../main.c     **** /*Podeis usar la subrutina de inicialización que habeis usado en la practicas anteriores*/
+  28:../main.c     **** 
+  29:../main.c     **** void intcont_init(void) {
+ 1816              		.loc 1 29 0
+ 1817              		.cfi_startproc
+ 1818              		@ Function supports interworking.
+ 1819              		@ args = 0, pretend = 0, frame = 0
+ 1820              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1821 0000 0DC0A0E1 		mov	ip, sp
+ 1822              	.LCFI0:
+ 1823              		.cfi_def_cfa_register 12
+ 1824 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1825 0008 04B04CE2 		sub	fp, ip, #4
+ 1826              		.cfi_offset 14, -8
+ 1827              		.cfi_offset 13, -12
+ 1828              		.cfi_offset 11, -16
+ 1829              	.LCFI1:
+ 1830              		.cfi_def_cfa 11, 4
+  30:../main.c     **** 	rINTCON = 0x0;
+ 1831              		.loc 1 30 0
+ 1832 000c 1E36A0E3 		mov	r3, #31457280
+ 1833 0010 0020A0E3 		mov	r2, #0
+ 1834 0014 002083E5 		str	r2, [r3, #0]
+  31:../main.c     **** 	rINTMOD= 0x0;
+ 1835              		.loc 1 31 0
+ 1836 0018 40309FE5 		ldr	r3, .L2
+ 1837 001c 0020A0E3 		mov	r2, #0
+ 1838 0020 002083E5 		str	r2, [r3, #0]
+  32:../main.c     **** 	rI_ISPC= ~(0x0);
+ 1839              		.loc 1 32 0
+ 1840 0024 38309FE5 		ldr	r3, .L2+4
+ 1841 0028 0020E0E3 		mvn	r2, #0
+ 1842 002c 002083E5 		str	r2, [r3, #0]
+  33:../main.c     **** 	rF_ISPC= ~(0x0);
+ 1843              		.loc 1 33 0
+ 1844 0030 30309FE5 		ldr	r3, .L2+8
+ 1845 0034 0020E0E3 		mvn	r2, #0
+ 1846 0038 002083E5 		str	r2, [r3, #0]
+  34:../main.c     **** 	rEXTINTPND=0xf;
+ 1847              		.loc 1 34 0
+ 1848 003c 28309FE5 		ldr	r3, .L2+12
+ 1849 0040 0F20A0E3 		mov	r2, #15
+ 1850 0044 002083E5 		str	r2, [r3, #0]
+  35:../main.c     **** 	rINTMSK= ~BIT_GLOBAL;
+ 1851              		.loc 1 35 0
+ 1852 0048 20309FE5 		ldr	r3, .L2+16
+ 1853 004c 0123E0E3 		mvn	r2, #67108864
+ 1854 0050 002083E5 		str	r2, [r3, #0]
+  36:../main.c     **** }
+ 1855              		.loc 1 36 0
+ 1856 0054 0CD04BE2 		sub	sp, fp, #12
+ 1857 0058 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1858 005c 1EFF2FE1 		bx	lr
+ 1859              	.L3:
+ 1860              		.align	2
+ 1861              	.L2:
+ 1862 0060 0800E001 		.word	31457288
+ 1863 0064 2400E001 		.word	31457316
+ 1864 0068 3C00E001 		.word	31457340
+ 1865 006c 5400D201 		.word	30539860
+ 1866 0070 0C00E001 		.word	31457292
+ 1867              		.cfi_endproc
+ 1868              	.LFE0:
+ 1870              		.align	2
+ 1871              		.global	main
+ 1873              	main:
+ 1874              	.LFB1:
+  37:../main.c     **** 
+  38:../main.c     **** int main(void)
+  39:../main.c     **** {	
+ 1875              		.loc 1 39 0
+ 1876              		.cfi_startproc
+ 1877              		@ Function supports interworking.
+ 1878              		@ args = 0, pretend = 0, frame = 0
+ 1879              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1880 0074 0DC0A0E1 		mov	ip, sp
+ 1881              	.LCFI2:
+ 1882              		.cfi_def_cfa_register 12
+ 1883 0078 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1884 007c 04B04CE2 		sub	fp, ip, #4
+ 1885              		.cfi_offset 14, -8
+ 1886              		.cfi_offset 13, -12
+ 1887              		.cfi_offset 11, -16
+ 1888              	.LCFI3:
+ 1889              		.cfi_def_cfa 11, 4
+  40:../main.c     **** 
+  41:../main.c     **** //Completar
+  42:../main.c     **** 
+  43:../main.c     **** 	/*Configurar el controlador de interrupciones*/
+  44:../main.c     **** 	intcont_init();
+ 1890              		.loc 1 44 0
+ 1891 0080 FEFFFFEB 		bl	intcont_init
+  45:../main.c     **** 
+  46:../main.c     **** 	/*Inicializar los leds, el display, el teclado matricial y el timer*/
+  47:../main.c     **** 	leds_init();
+ 1892              		.loc 1 47 0
+ 1893 0084 FEFFFFEB 		bl	leds_init
+  48:../main.c     **** 	D8Led_init();
+ 1894              		.loc 1 48 0
+ 1895 0088 FEFFFFEB 		bl	D8Led_init
+  49:../main.c     **** 	 keyboard_init();
+ 1896              		.loc 1 49 0
+ 1897 008c FEFFFFEB 		bl	keyboard_init
+  50:../main.c     **** 	 timer_init();
+ 1898              		.loc 1 50 0
+ 1899 0090 FEFFFFEB 		bl	timer_init
+  51:../main.c     **** 
+  52:../main.c     **** 	 led2_off();
+ 1900              		.loc 1 52 0
+ 1901 0094 FEFFFFEB 		bl	led2_off
+  53:../main.c     **** 	 led1_on();
+ 1902              		.loc 1 53 0
+ 1903 0098 FEFFFFEB 		bl	led1_on
+  54:../main.c     **** 
+  55:../main.c     **** 	/*mostrar el símbolo inicial en el display*/
+  56:../main.c     **** 	 D8Led_digit(12);
+ 1904              		.loc 1 56 0
+ 1905 009c 0C00A0E3 		mov	r0, #12
+ 1906 00a0 FEFFFFEB 		bl	D8Led_digit
+  57:../main.c     **** 
+  58:../main.c     **** 	/*Inicializar el modo juego*/
+  59:../main.c     **** 	 modojuego=0;
+ 1907              		.loc 1 59 0
+ 1908 00a4 10309FE5 		ldr	r3, .L6
+ 1909 00a8 0020A0E3 		mov	r2, #0
+ 1910 00ac 002083E5 		str	r2, [r3, #0]
+  60:../main.c     **** 
+  61:../main.c     **** 	Delay(0);
+ 1911              		.loc 1 61 0
+ 1912 00b0 0000A0E3 		mov	r0, #0
+ 1913 00b4 FEFFFFEB 		bl	Delay
+ 1914              	.L5:
+  62:../main.c     **** 		
+  63:../main.c     **** 	while(1);
+ 1915              		.loc 1 63 0 discriminator 1
+ 1916 00b8 FEFFFFEA 		b	.L5
+ 1917              	.L7:
+ 1918              		.align	2
+ 1919              	.L6:
+ 1920 00bc 00000000 		.word	modojuego
+ 1921              		.cfi_endproc
+ 1922              	.LFE1:
+ 1924              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\Inma\AppData\Local\Temp\ccMpJOO0.s:1811   .text:00000000 $a
+C:\Users\Inma\AppData\Local\Temp\ccMpJOO0.s:1814   .text:00000000 intcont_init
+C:\Users\Inma\AppData\Local\Temp\ccMpJOO0.s:1862   .text:00000060 $d
+C:\Users\Inma\AppData\Local\Temp\ccMpJOO0.s:1870   .text:00000074 $a
+C:\Users\Inma\AppData\Local\Temp\ccMpJOO0.s:1873   .text:00000074 main
+C:\Users\Inma\AppData\Local\Temp\ccMpJOO0.s:1920   .text:000000bc $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+leds_init
+D8Led_init
+keyboard_init
+timer_init
+led2_off
+led1_on
+D8Led_digit
+Delay
+modojuego
